@@ -2,11 +2,13 @@
 
 use App\Http\Middleware\LogRequestDetails;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -33,6 +35,20 @@ return Application::configure(basePath: dirname(__DIR__))
             }
         });
 
+
+        // Model not found exception
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+
+            if ($request->is('api/*')) {
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 404);
+            }
+        });
+
+
         // Validated exception
         $exceptions->render(function (ValidationException  $e, Request $request) {
 
@@ -40,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'status' => 'error',
                 'message' => $e->getMessage(),
                 'errors' => $e->errors()
-            ]);
+            ],422);
         });
 
         // fallback exception

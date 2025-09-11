@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\api\AuthenticatedUserController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Middleware\EnsureUserIsGuest;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +22,8 @@ Route::middleware('throttle:api')->group(function () {
 
         Route::post('logout', [AuthenticatedUserController::class, 'destroy']);
         Route::get('user', [AuthenticatedUserController::class, 'show']);
+
+        Route::apiResource('companies',CompanyController::class);
+        Route::apiResource('employees',EmployeeController::class);
     });
 });

@@ -29,7 +29,7 @@ class AuthenticatedUserController extends Controller
 
             return response()->json(['message' => ('Login success')]);
         }
-        logger('fails');
+
 
         throw new AuthenticationException('Invalid user credintials');
     }
@@ -38,7 +38,9 @@ class AuthenticatedUserController extends Controller
     public function show(Request $request)
     {
 
-        return  $request->user();
+        return  response()->json([
+            'user' => $request->user()
+        ]);
     }
 
     public function destroy(Request $request)
