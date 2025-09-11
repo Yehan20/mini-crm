@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\EmployeeRequest;
+use App\Http\Resources\EmployeeResource;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+
+class EmployeeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        //
+        if ($request->query('dropdown') === true) {
+            return EmployeeResource::collection(Employee::query()->get(['first_name', 'last_name']));
+        }
+        return EmployeeResource::collection(Employee::with('company:id,name,website')->paginate(10));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(EmployeeRequest $request)
+    {
+        //
+        $attributes = $request->validated();
+        
+        return new EmployeeResource(Employee::query()->create($attributes));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Employee $employee)
+    {
+        //
+        return new EmployeeResource($employee->load('company'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(EmployeeRequest $request, Employee $employee)
+    {
+        //
+
+        $employee->update($request->validated());
+
+        return new EmployeeResource($employee);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Employee $employee)
+    {
+        //
+
+        $employee->delete();
+
+        return response()->noContent();
+    }
+}
