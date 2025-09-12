@@ -5,7 +5,7 @@
 
 You can use the following test user to log in:
 
-- **Email:** `admin@crm`
+- **Email:** `admin@crm.com`
 - **Password:** `password`
 
 ## Features
@@ -111,7 +111,7 @@ git remote add origin https://github.com/<your-github-username>/<your-repo-name>
    The API will be available at `http://localhost:8000`.
    
 >  **Note:**  
-> If you use different domian in front end for auth make sure to add it in the statefull comains  in your Laravel `config/sanctum.php` file:  
+> If you use different domian in front end for auth make sure to add it in the statefull domains  in your Laravel `config/sanctum.php` file:  
 
 #### Email Server Configuration and queue configuration
 
@@ -216,12 +216,14 @@ php artisan test
 | Method | Endpoint                 | Description                   |
 |--------|--------------------------|-------------------------------|
 | POST   | `/login`                 | User login                    |
-| POST   | `/sanctum/csrf`          | User registration             |
+| POST   | `/sanctum/csrf`          | Csrf Route                    |
 | POST   | `/logout`                | User logout                   |
 | GET    | `/api/user`              | Get authenticated user info   |
 | GET    | `/api/companies`         | List all companies Paginated  |
-| GET    | `/api/companies/{id}`    | Get a specific companies      |
-| POST   | `/api/companies`         | Create a new companies        |
+| GET    | `/api/companies/{id}`    | Get a specific company        |
+| PUT    | `/api/companies/{id}`    | Update a  company             |
+| DELETE | `/api/companies/{id}`    | Delete a company              |
+| POST   | `/api/companies`         | Create a new company          |
 | GET    | `/api/employees`         | List all employees Paginated  |
 | PUT    | `/api/employees/{id}`    | Update an employee            |
 | DELETE | `/api/employees/{id}`    | Delete an employee            |
