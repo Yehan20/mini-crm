@@ -29,7 +29,7 @@ class EmployeeRequest extends FormRequest
             'last_name' => ['required', 'string',  'max:30'],
             'company_id' => ['required', 'numeric', 'exists:companies,id'],
             'email' => ['required', 'string', 'email', 'unique:employees,email'],
-            'phone' => ['required', 'string', 'max:14'],
+            'phone' => ['required', 'string', 'max:20'],
         ];
 
         if (in_array($this->method(), ['PATCH', 'PUT'])) {
