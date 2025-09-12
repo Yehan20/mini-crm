@@ -9,12 +9,7 @@ Route::middleware('throttle:api')->group(function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
 
-        Route::get('ping', function () {
-            return response()->json([
-                'message' => 'pong',
-            ]);
-        });
-
+      
         Route::get('user', [AuthenticatedUserController::class, 'show']);
 
         Route::apiResource('companies', CompanyController::class);
