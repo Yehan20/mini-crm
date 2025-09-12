@@ -1,8 +1,18 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AuthenticatedUserController;
+use App\Http\Controllers\api\CompanyController;
+use App\Http\Controllers\api\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware('throttle:api')->group(function () {
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+
+      
+        Route::get('user', [AuthenticatedUserController::class, 'show']);
+
+        Route::apiResource('companies', CompanyController::class);
+        Route::apiResource('employees', EmployeeController::class);
+    });
+});
