@@ -32,7 +32,7 @@ class CompanyRequest extends FormRequest
         if (in_array($this->method(), ['PATCH', 'PUT'])) {
 
             $company = $this->route('company');
-            $rules['name'] = ['required', 'string', 'min:3', 'max:20', Rule::unique('companies', 'name')->ignore($company->id)];
+            $rules['name'] = ['required', 'string', 'min:3', 'max:30', Rule::unique('companies', 'name')->ignore($company->id)];
             $rules['email'] = ['required', 'email', Rule::unique('companies', 'email')->ignore($company->id)];
             $rules['logo'] = ['nullable', 'file', 'mimes:jpg,webp,png,jpeg', Rule::dimensions()->width(100)->height(100)];
         }

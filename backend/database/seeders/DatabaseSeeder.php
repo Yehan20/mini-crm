@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Admin Crm',
                 'email' => 'admin@crm.com',
                 'is_admin' => true,
+                'password'=>'password',
             ]);
         }
 

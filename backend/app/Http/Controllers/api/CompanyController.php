@@ -10,6 +10,7 @@ use App\Http\Resources\CompanyDropwDownResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -66,6 +67,7 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
 
+        Storage::disk('public')->delete($company->logo);
         $company->delete();
 
         return response()->noContent();

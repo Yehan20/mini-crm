@@ -62,19 +62,26 @@ return Application::configure(basePath: dirname(__DIR__))
         // Validated exception
         $exceptions->render(function (ValidationException $e, Request $request) {
 
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-                'errors' => $e->errors(),
-            ], 422);
+            if ($request->is('api/*')) {
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                    'errors' => $e->errors(),
+                ], 422);
+            }
         });
 
         // fallback exception
         $exceptions->render(function (Exception $e, Request $request) {
 
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            if ($request->is('api/*')) {
+
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
         });
     })->create();
