@@ -15,7 +15,7 @@ class ProcessCompany implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public Company  $company)
+    public function __construct(public Company $company)
     {
         //
     }

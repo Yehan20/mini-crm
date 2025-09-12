@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\actions;
 
-use App\Jobs\ProcessCompany;
 use App\Models\Company;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -19,11 +18,11 @@ class UpdateCompany
         //
     }
 
-    public function execute(Company $company, array $attributes, UploadedFile|null $file): Company
+    public function execute(Company $company, array $attributes, ?UploadedFile $file): Company
     {
 
         if ($file) {
-            //delete the existing file
+            // delete the existing file
             Storage::disk('public')->delete($company->logo);
             // store the new file
             $path = $file->store('logos', 'public');

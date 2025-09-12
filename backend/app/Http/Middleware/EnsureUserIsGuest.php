@@ -16,10 +16,11 @@ class EnsureUserIsGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
-       // dd("bug");
-        if($request->user()) {
-           throw new UnauthorizedException('Authenticated user cannot login again',403);
+        // dd("bug");
+        if ($request->user()) {
+            throw new UnauthorizedException('Authenticated user cannot login again', 403);
         }
+
         return $next($request);
     }
 }

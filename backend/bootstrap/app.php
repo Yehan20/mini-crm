@@ -2,10 +2,10 @@
 
 use App\Http\Middleware\LogRequestDetails;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -24,17 +24,14 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
 
-        //Unauthorized exception
+        // Unauthorized exception
         $exceptions->render(function (AuthenticationException $e, Request $request) {
 
-            if ($request->is('api/*')) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => $e->getMessage(),
-                ], 401);
-            }
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 401);
         });
-
 
         // Model not found exception
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
@@ -43,20 +40,33 @@ return Application::configure(basePath: dirname(__DIR__))
 
                 return response()->json([
                     'status' => 'error',
-                    'message' => $e->getMessage(),
+                    'message' => 'Resource not found',
                 ], 404);
             }
         });
 
 
+        // Too many requests
+        $exceptions->render(function (ThrottleRequestsException $e, Request $request) {
+
+            if ($request->is('api/*')) {
+
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 429);
+            }
+        });
+
+
         // Validated exception
-        $exceptions->render(function (ValidationException  $e, Request $request) {
+        $exceptions->render(function (ValidationException $e, Request $request) {
 
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
-                'errors' => $e->errors()
-            ],422);
+                'errors' => $e->errors(),
+            ], 422);
         });
 
         // fallback exception

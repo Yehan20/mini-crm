@@ -29,18 +29,15 @@ class EmployeeRequest extends FormRequest
             'last_name' => ['required', 'string',  'max:30'],
             'company_id' => ['required', 'numeric', 'exists:companies,id'],
             'email' => ['required', 'string', 'email', 'unique:employees,email'],
-            'phone' => ['required', 'string', 'size:10'],
+            'phone' => ['required', 'string', 'max:14'],
         ];
 
-
         if (in_array($this->method(), ['PATCH', 'PUT'])) {
-
-    
 
             $employee = $this->route('employee');
 
             $rules['email'] = ['required', 'email', Rule::unique('employees', 'email')->ignore($employee->id)];
-         
+
         }
 
         return $rules;
