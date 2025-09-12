@@ -18,10 +18,10 @@ class CompanyFactory extends Factory
     {
         return [
             //
-            'name'=>fake()->unique()->company(),
-            'email'=>fake()->unique()->companyEmail(),
-            'website'=>'https://www.'.fake()->domainName(),
-            'logo'=>'https://placehold.co/100',
+            'name' => fake()->unique()->company(),
+            'email' => fake()->unique()->companyEmail(),
+            'website' => 'https://www.'.fake()->domainName(),
+            'logo' => 'https://placehold.co/100',
         ];
     }
 }

@@ -21,11 +21,9 @@ class LogRequestDetails
             'method' => $request->method(),
             'url' => $request->fullUrl(),
             'ip' => $request->ip(),
-            'origin'=>$request->getHost(),
+            'origin' => $request->getHost(),
 
         ]);
-
-
 
         return $next($request);
     }

@@ -21,7 +21,7 @@ class Company extends Model
         'name',
         'email',
         'website',
-        'logo'
+        'logo',
     ];
 
     public function employees(): HasMany
@@ -36,10 +36,11 @@ class Company extends Model
         return Attribute::make(
 
             get: function (string $value) {
-                if (Str::contains($value,'placehold.co')) {
-                    return  $value;
+                if (Str::contains($value, 'placehold.co')) {
+                    return $value;
                 }
-                return config('app.url') . '/storage/' . $value;
+
+                return config('app.url').'/storage/'.$value;
             }
 
         );

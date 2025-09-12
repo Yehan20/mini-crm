@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class AuthenticatedUserController extends Controller
 {
@@ -17,9 +14,9 @@ class AuthenticatedUserController extends Controller
 
     public function store(LoginRequest $request)
     {
-        //dd("login");
+        // dd("login");
 
-        $credintials =  $request->validated();
+        $credintials = $request->validated();
 
         if (Auth::attempt($credintials)) {
 
@@ -27,19 +24,19 @@ class AuthenticatedUserController extends Controller
 
             request()->session()->regenerate();
 
-            return response()->json(['message' => ('Login success')]);
+            return response()->json([
+                'user' => $request->user(),
+            ]);
         }
 
-
-        throw new AuthenticationException('Invalid user credintials');
+        throw new AuthenticationException('Invalid user credentials');
     }
-
 
     public function show(Request $request)
     {
 
-        return  response()->json([
-            'user' => $request->user()
+        return response()->json([
+            'user' => $request->user(),
         ]);
     }
 

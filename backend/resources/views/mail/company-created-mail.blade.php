@@ -1,14 +1,19 @@
 <x-mail::message>
-# Introduction
+# Company Created Successfully!
 
-This is to inform you that your company has been created
+We’re excited to let you know that your company has been created in our system.
 
+---
+
+**Company Name:**  
 {{ $company->name }}
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+---
 
-Thanks,<br>
-{{ config('app.name') }}
+
+Thank you for choosing **{{ config('app.name') }}**.  
+We’re glad to have you onboard!
+
+Regards,  
+The {{ config('app.name') }} Team
 </x-mail::message>

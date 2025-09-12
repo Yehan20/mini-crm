@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\actions;
 
 use App\Jobs\ProcessCompany;
@@ -16,15 +18,16 @@ class CreateCompany
         //
     }
 
-    public function execute(array $attributes,UploadedFile $file):Company {
-        
-        // 
-        $path = $file->store('logos','public');
+    public function execute(array $attributes, UploadedFile $file): Company
+    {
+
+        //
+        $path = $file->store('logos', 'public');
 
         $company = Company::query()->create(
-           array_merge($attributes,[
-            'logo'=>$path
-           ]) 
+            array_merge($attributes, [
+                'logo' => $path,
+            ])
         );
 
         ProcessCompany::dispatch($company)->afterCommit();

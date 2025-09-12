@@ -81,6 +81,4 @@ return [
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
-    'prefix'=>'api'
-
 ];

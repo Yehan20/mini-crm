@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
@@ -18,7 +19,8 @@ class EmployeeController extends Controller
         if ($request->query('dropdown') === true) {
             return EmployeeResource::collection(Employee::query()->get(['first_name', 'last_name']));
         }
-        return EmployeeResource::collection(Employee::with('company:id,name,website')->paginate(10));
+
+        return EmployeeResource::collection(Employee::with('company:id,name,website')->latest()->paginate(10));
     }
 
     /**
@@ -28,7 +30,7 @@ class EmployeeController extends Controller
     {
         //
         $attributes = $request->validated();
-        
+
         return new EmployeeResource(Employee::query()->create($attributes));
     }
 

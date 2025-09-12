@@ -26,25 +26,24 @@ class GenerateAdminUser extends Command
      * Execute the console command.
      */
     public function handle()
-    {   
+    {
         $email = $this->argument('email');
-    
 
-        if(User::where('email',$email)->first()) {
+        if (User::where('email', $email)->first()) {
 
-          $this->error('Email already taken.');
-          return 1;
+            $this->error('Email already taken.');
+
+            return 1;
         }
-      
+
         $user = User::create([
-            'email'=>$email,
-            'name'=>$this->argument('name'),
-            'password'=>Hash::make($this->argument('password')),
-            'is_admin'=>true
+            'email' => $email,
+            'name' => $this->argument('name'),
+            'password' => Hash::make($this->argument('password')),
+            'is_admin' => true,
         ]);
 
         $this->info("Admin User created Email:{$user->email} Password:{$this->argument('password')}");
 
-      
     }
 }

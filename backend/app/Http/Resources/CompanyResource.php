@@ -5,7 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 class CompanyResource extends JsonResource
 {
@@ -20,12 +19,12 @@ class CompanyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'employees' => new EmployeeResource($this->whenLoaded('employees')),
-            'email'=>$this->email,
-            'employees_count'=>$this->whenCounted('employees'),
+            'email' => $this->email,
+            'employees_count' => $this->whenCounted('employees'),
             'website' => $this->website,
-            'logo' =>$this->logo,
+            'logo' => $this->logo,
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
-            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString()
+            'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];
 
         // parent::toArray($request);
