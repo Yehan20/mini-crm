@@ -20,7 +20,7 @@ class AuthenticatedUserController extends Controller
 
         if (Auth::attempt($credintials)) {
 
-            logger('success login');
+      
 
             request()->session()->regenerate();
 

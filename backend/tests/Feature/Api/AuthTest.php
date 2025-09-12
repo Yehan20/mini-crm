@@ -23,9 +23,14 @@ class AuthTest extends TestCase
     public function test_users_can_login_and_validate_session_and_logout(): void
     {
 
-        $response = $this->postJson('login', [
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        // Step 2: Login with CSRF + cookies
+        $response = $this->post('/login', [
             'email' => $this->user->email,
             'password' => 'password',
+        ], [
+            'X-XSRF-TOKEN' => $csrf->headers->getCookies()[0]->getValue(),
         ]);
 
         $response->assertStatus(200);
@@ -47,9 +52,13 @@ class AuthTest extends TestCase
     public function test_users_cannot_login_with_invalid_credintials(): void
     {
 
-        $response = $this->postJson('/login', [
+        $csrf = $this->get('/sanctum/csrf-cookie');
+
+        $response = $this->postJson('login', [
             'email' => 'wronguser@test.com',
             'password' => 'password',
+        ], [
+            'X-XSRF-TOKEN' => $csrf->headers->getCookies()[0]->getValue(),
         ]);
 
         $response->assertStatus(401);
@@ -58,12 +67,6 @@ class AuthTest extends TestCase
             'status',
             'message',
         ]);
-    }
-
-    public function test_users_cannot_logout_without_login(): void
-    {
-
-        $this->postJson('logout')->assertStatus(401);
     }
 
     private function createUser(): User

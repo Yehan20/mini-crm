@@ -29,20 +29,5 @@ class Company extends Model
         return $this->hasMany(Employee::class);
     }
 
-    // Custom attributes
-    protected function logo(): Attribute
-    {
-
-        return Attribute::make(
-
-            get: function (string $value) {
-                if (Str::contains($value, 'placehold.co')) {
-                    return $value;
-                }
-
-                return config('app.url').'/storage/'.$value;
-            }
-
-        );
-    }
+    
 }

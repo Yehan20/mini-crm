@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class CompanyResource extends JsonResource
 {
@@ -22,11 +23,22 @@ class CompanyResource extends JsonResource
             'email' => $this->email,
             'employees_count' => $this->whenCounted('employees'),
             'website' => $this->website,
-            'logo' => $this->logo,
+            'logo' => $this->formatLogo($this->logo),
             'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];
 
-        // parent::toArray($request);
+    
+    }
+
+    protected function formatLogo(?string $value): ?string
+    {
+        if (!$value) {return null;}
+
+        if (Str::contains($value, 'placehold.co')) {
+            return $value;
+        }
+
+        return config('app.url') . '/storage/' . $value;
     }
 }

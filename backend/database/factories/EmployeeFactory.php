@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,11 +17,12 @@ class EmployeeFactory extends Factory
      */
     public function definition(): array
     {
+        $companyIds = Company::limit(10)->pluck('id')->toArray();
         return [
             //
             'first_name' => fake()->unique()->firstName(),
             'last_name' => fake()->unique()->lastName(),
-            'company_id' => fake()->numberBetween(1, 20),
+            'company_id' => fake()->randomElement($companyIds),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->tollFreePhoneNumber(),
 

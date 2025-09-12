@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\actions;
+namespace App\Actions;
 
 use App\Jobs\ProcessCompany;
 use App\Models\Company;
