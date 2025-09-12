@@ -3,31 +3,16 @@ import  { AxiosError } from "axios";
 import axios from '../utils/axios';
 
 import { Card, Spinner, Table, Alert, TableRow, TableHead, TableHeadCell, TableBody, TableCell } from "flowbite-react";
+import type { Company, Status } from "../types/types";
 
-type Employee = {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-};
 
-type Company = {
-    id?: number;
-    name: string;
-    email: string;
-    logo: File | null | string;
-    website: string;
-    employees: Employee[];
-};
+export default function CompanyCard({ id }: { readonly id: string }) {
 
-type Status = "pending" | "success" | "error" | "idle";
-
-export default function CompanyCard({ id }: { id: string }) {
     const [company, setCompany] = useState<Company | null>(null);
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
 
+    // Fethc company
     useEffect(() => {
         const fetchCompany = async (id: string) => {
             setStatus("pending");
@@ -104,7 +89,7 @@ export default function CompanyCard({ id }: { id: string }) {
 
                     </TableHead>
                     <TableBody >
-                        {company.employees.length > 0 ? (
+                        {company.employees && company.employees.length > 0 ? (
                             company.employees.map((emp) => (
                                 <TableRow key={emp.id} className="bg-white">
                                     <TableCell>{emp.first_name}</TableCell>

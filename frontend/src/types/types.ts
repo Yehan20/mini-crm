@@ -27,12 +27,16 @@ export type Status = 'pending' | 'success' | 'error' | 'idle';
 
 
 // Emplpoyeer related types
-export type Employer = {
+export type Employee = {
     id?: number
     first_name: string,
     last_name: string,
     email: string,
     company_id?: number | '',
+    company?:{
+       name:string,
+       id:number
+    },
     phone: string
 }
 
@@ -50,29 +54,22 @@ export type errorBagProp = {
 };
 
 
-
 // Company related types
 export type Company = {
     id?: number,
     name: string,
     employees_count?: number
     email: string,
-     logo: File | null | string,
+    logo: File | null | string,
     website: string
+    employees?: Employee[];
+    
 }
-
-// export type NewCompany = {
-//     id?: number
-//     name: string,
-//     email: string,
-//     logo: File | null | string,
-//     website: string
-// }
-
 
 
 // Login prop 
 export type LoginPropType = {
     email: string;
     password: string;
-  };
+};
+

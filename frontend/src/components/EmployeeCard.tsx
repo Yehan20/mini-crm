@@ -3,35 +3,30 @@ import { AxiosError } from "axios";
 import axios from "../utils/axios";
 import { Card, Spinner, Alert } from "flowbite-react";
 import { Link } from "react-router";
+import type { Employee, Status } from "../types/types";
 
-type Employee = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-  company: {
-    id: number;
-    name: string;
-  };
-};
 
-type Status = "pending" | "success" | "error" | "idle";
 
-export default function EmployeeCard({ id }: { id: string }) {
+
+export default function EmployeeCard({ id }: {  readonly id: string }) {
+
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
+
+  // Get the employee
   useEffect(() => {
 
     const fetchEmployee = async (id: string) => {
       setStatus("pending");
+
       try {
         const res = await axios.get(`api/employees/${id}`);
         setEmployee(res.data.data);
         setStatus("success");
-      } catch (e) {
+      } 
+      catch (e) {
         if (e instanceof AxiosError) {
           setError(e.response?.data.message ?? "Failed to fetch employee");
         } else {
@@ -64,6 +59,7 @@ export default function EmployeeCard({ id }: { id: string }) {
 
   return (
     <div className="space-y-6 pb-6 pr-6 max-w-3xl">
+
       {/* Employee Info */}
       <Card>
         <div className="flex items-center space-x-4">

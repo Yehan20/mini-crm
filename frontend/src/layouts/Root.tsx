@@ -1,6 +1,4 @@
 
-"use client";
-
 import {
   Button,
   Drawer,
@@ -26,6 +24,7 @@ const Root = () => {
 
 
   const handleClose = () => setIsOpen(false);
+
 
   const { user, status, logout } = useAuth();
 
@@ -53,6 +52,7 @@ const Root = () => {
   const handleLogout = async () => {
     try {
       await logout();
+   
     } catch (e) {
       console.log('failed to logout', e);
     }
@@ -89,7 +89,7 @@ const Root = () => {
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden absolute right-4 top-5 flex items-center justify-center cursor-pointer">
           <FiMenu color="black " size={20} />
         </button>
-        
+
         <div className="px-4  md:pl-[350px] max-w-[1600px]">
           <Outlet />
           <Footer />

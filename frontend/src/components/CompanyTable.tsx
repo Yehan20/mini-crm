@@ -8,14 +8,10 @@ import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import type { Company, Status } from "../types/types";
 
-
-
-
 export default function CompanyTable() {
 
 
     const [currentPage, setCurrentPage] = useState(1);
-
 
     const rows = [
         'Id', 'Name', 'Email', 'Website', 'Logo', 'Emlpoyees', 'Action'
@@ -30,10 +26,11 @@ export default function CompanyTable() {
     const [loading, setLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    const [totalPages, setTotalPages] = useState(1);
 
 
-
-    const fetchCompanies = async (number = 1) => {
+    // Fethch company perpage
+    const fetchCompaniesPerPage = async (number = 1) => {
 
         const companies = await axios.get(`api/companies?page=${number}`);
 
@@ -46,7 +43,7 @@ export default function CompanyTable() {
         setPageLoaded(false)
         setCurrentPage(page)
         try {
-            await fetchCompanies(page);
+            await fetchCompaniesPerPage(page);
         } catch (error) {
 
             if (error instanceof AxiosError) {
@@ -56,7 +53,6 @@ export default function CompanyTable() {
         } finally {
             setPageLoaded(true);
         }
-
 
     };
 
@@ -95,7 +91,7 @@ export default function CompanyTable() {
     }
 
 
-
+    // Clean up fetch to prevent memory leaks
     useEffect(() => {
         const controller = new AbortController();
 
@@ -105,11 +101,12 @@ export default function CompanyTable() {
                 const companies = await axios.get(`api/companies?page=1`, { signal: controller.signal });
 
                 setCompanies(companies.data.data)
+                setTotalPages(companies.data.meta.last_page)
                 setStatus('success')
 
             } catch (error) {
 
-
+                // Ignore this error it will prevent the spinner from showing
                 if (error instanceof CanceledError) {
                     return;
                 }
@@ -137,7 +134,7 @@ export default function CompanyTable() {
 
 
     return (
-        <div className="pr-6 pt-6 w-full max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="pr-6 pt-6 pb-4 w-full max-w-6xl mx-auto flex flex-col gap-6">
             {/* Toast */}
             {showToast && (
                 <Toast>
@@ -156,11 +153,18 @@ export default function CompanyTable() {
                 </div>
             )}
 
+
+            {/* Pagination */}
+
+            <div className="mt-1 flex ">
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+            </div>
+
             {/* Table */}
             {status === "success" && (
                 <div className="overflow-x-auto  rounded-lg ">
-                    <Table className="w-full">
-                        <TableHead>
+                    <Table className="w-full sticky">
+                        <TableHead >
                             <TableRow>
                                 {rows.map((row) => (
                                     <TableHeadCell key={row} className="text-gray-700">
@@ -170,6 +174,8 @@ export default function CompanyTable() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
+
+                            {/*companies */}
                             {pageLoaded &&
                                 companies.map((company) => (
                                     <TableRow key={company.id} className="bg-white">
@@ -180,10 +186,10 @@ export default function CompanyTable() {
                                         <TableCell>{company.email}</TableCell>
                                         <TableCell>{company.website}</TableCell>
                                         <TableCell>
-                                            <img src={company.logo} alt={company.name} className="h-10 w-10 object-cover rounded" />
+                                            <img src={company.logo as string} alt={company.name} className="h-10 w-10 object-cover rounded" />
                                         </TableCell>
                                         <TableCell>{company.employees_count}</TableCell>
-                                        <TableCell className="flex gap-2">
+                                        <TableCell className="flex gap-2 items-center">
                                             <Link
                                                 to={`/companies/${company.id}/edit`}
                                                 className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition text-sm"
@@ -199,7 +205,7 @@ export default function CompanyTable() {
                                             <Button
                                                 size="sm"
                                                 color="red"
-                                                onClick={() => showDeleteModel(company.id)}
+                                                onClick={() => showDeleteModel(company.id as number)}
                                             >
                                                 Delete
                                             </Button>
@@ -207,14 +213,22 @@ export default function CompanyTable() {
                                     </TableRow>
                                 ))}
 
+
+                            {pageLoaded && companies.length === 0 && (
+
+                                <TableRow>
+                                    <TableCell colSpan={7} className="text-center text-lg py-4 text-gray-500">
+                                        No records found
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+                            {/* Show skeleton when loading pagination */}
                             {!pageLoaded && <TableSkeleton />}
                         </TableBody>
                     </Table>
 
-                    {/* Pagination */}
-                    <div className="mt-4 flex justify-center">
-                        <Pagination currentPage={currentPage} totalPages={100} onPageChange={onPageChange} />
-                    </div>
+
                 </div>
             )}
 

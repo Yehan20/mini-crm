@@ -4,13 +4,13 @@ import { Alert, Button, HelperText, Label, Select, Spinner, TextInput, Toast, To
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, } from "react-router";
 import axios from "../utils/axios";
-import type { CompanyDropDown, Employer, errorBagProp, Status } from "../types/types";
+import type { CompanyDropDown, Employee, errorBagProp, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
 
-export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
+export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
 
-    const [newEmployer, setnewEmployer] = useState<Employer>({
+    const [newEmployer, setnewEmployer] = useState<Employee>({
 
         first_name: '',
         last_name: '',
@@ -105,7 +105,7 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
 
             setTimeout(() => {
                 navigate('/employees')
-            }, 500)
+            }, 1000)
 
 
 
@@ -124,7 +124,7 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
         }
     }
 
-    const createEmployer = async (data: Employer) => {
+    const createEmployer = async (data: Employee) => {
 
 
         const employee = await axios.post('api/employees', data)
@@ -142,7 +142,7 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
         }
     }
 
-    const updateEmployer = async (data: Employer) => {
+    const updateEmployer = async (data: Employee) => {
 
         const employee = await axios.put(`api/employees/${params.id}`, data)
 
@@ -220,14 +220,14 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
             </Toast>)}
 
 
-    
+
 
             {status === 'success' && (<form onSubmit={handleSave} className="flex min-w-2xl w-full  p-6  flex-col gap-4 bg-gray-50 rounded-lg">
                 {/* First Name */}
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="first_name" >
-                            Employer First Name*
+                            Employee First Name*
                         </Label>
                     </div>
                     <TextInput id="first_name" type="text" name="first_name" value={newEmployer.first_name}
@@ -236,11 +236,12 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
 
                     {/* Error messages */}
                     <div className="mt-2">
-                        {errors?.first_name && errors.first_name.map((err) => {
-                            return (<HelperText className="text-red-500 my-0" key={err}>
+                        {errors?.first_name?.map((err) => (
+                            <HelperText className="text-red-500 my-0" key={err}>
                                 {err}
-                            </HelperText>)
-                        })}
+                            </HelperText>
+                        ))}
+
                     </div>
                 </div>
 
@@ -248,7 +249,7 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="name" >
-                            Employer Last Name*
+                            Employee Last Name*
                         </Label>
                     </div>
                     <TextInput id="last_name" type="text" name="last_name" value={newEmployer.last_name}
@@ -258,11 +259,12 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
 
                     {/* Error messages */}
                     <div className="mt-2">
-                        {errors?.last_name && errors.last_name.map((err) => {
-                            return (<HelperText className="text-red-500 my-0" key={err}>
+                        {errors?.last_name?.map((err) => (
+                            <HelperText className="text-red-500 my-0" key={err}>
                                 {err}
-                            </HelperText>)
-                        })}
+                            </HelperText>
+                        ))}
+
                     </div>
                 </div>
 
@@ -270,7 +272,7 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
                 {/* Email */}
                 <div>
                     <div className="mb-2 block">
-                        <Label htmlFor="email">Employer email*</Label>
+                        <Label htmlFor="email">Employee email*</Label>
                     </div>
                     <TextInput id="email" type="email" name="email" value={newEmployer.email}
                         color={errors?.email?.length ? 'failure' : 'gray'}
@@ -278,11 +280,12 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
 
                     {/* Error messages */}
                     <div className="mt-2">
-                        {errors?.email && errors.email.map((err) => {
-                            return (<HelperText className="text-red-500 my-0" key={err}>
+                        {errors?.email?.map((err) => (
+                            <HelperText className="text-red-500 my-0" key={err}>
                                 {err}
-                            </HelperText>)
-                        })}
+                            </HelperText>
+                        ))}
+
                     </div>
                 </div>
 
@@ -300,11 +303,11 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
 
                     {/* Error messages */}
                     <div className="mt-2">
-                        {errors?.phone && errors.phone.map((err) => {
-                            return (<HelperText className="text-red-500 my-0" key={err}>
+                        {errors?.phone?.map((err) => (
+                            <HelperText className="text-red-500 my-0" key={err}>
                                 {err}
-                            </HelperText>)
-                        })}
+                            </HelperText>
+                        ))}
                     </div>
 
                 </div>
@@ -318,19 +321,21 @@ export default function EmployeeForm({ mode }: { mode: 'Create' | 'Update' }) {
                     </div>
                     <Select id="company_id" name="company_id" value={newEmployer.company_id} onChange={(e) => handleInput(e)}>
                         <option value='' disabled>Select</option>
-                        {companyDropDown.length && companyDropDown.map((dropdown) => {
-                            return (<option value={dropdown.id} key={dropdown.id}>
+                        {Array.isArray(companyDropDown) && companyDropDown.map((dropdown) => (
+                            <option value={dropdown.id} key={dropdown.id}>
                                 {dropdown.name}
-                            </option>)
-                        })}
+                            </option>
+                        ))}
+
                     </Select>
 
                     <div className="mt-2">
-                        {errors?.company_id && errors.company_id.map((err) => {
-                            return (<HelperText className="text-red-500 my-0" key={err}>
+                        {errors?.company_id?.map((err) => (
+                            <HelperText className="text-red-500 my-0" key={err}>
                                 {err}
-                            </HelperText>)
-                        })}
+                            </HelperText>
+                        ))}
+
                     </div>
                 </div>
 

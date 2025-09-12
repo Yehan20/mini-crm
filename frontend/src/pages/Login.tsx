@@ -151,7 +151,7 @@ const Login = () => {
         {/* Alert if users login wrong */}
         {showAlert && (
           <Alert color="failure" className="mt-4 text-center">
-            <span className="font-medium">Alert!</span> {error}
+            <span className="font-medium">{error}</span> 
           </Alert>
         )}
 

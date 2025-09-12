@@ -1,4 +1,3 @@
-import React from 'react'
 import CompanyForm from '../components/CompanyForm'
 
 const CompanyEdit = () => {
@@ -7,7 +6,7 @@ const CompanyEdit = () => {
       <h1 className="text-2xl md:text-3xl font-bold  text-gray-800 mb-6">
         Edit Company
       </h1>
-      <CompanyForm mode='update' />
+      <CompanyForm mode='Update' />
     </div>
   )
 }

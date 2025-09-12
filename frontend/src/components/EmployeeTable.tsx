@@ -6,16 +6,9 @@ import axios from '../utils/axios';
 import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import TableSkeleton from "./TableSkeleton";
+import type { Employee } from "../types/types";
 
-type Employee = {
-    id: number,
-    first_name: string,
-    last_name: string,
-    company_id: number
-    email: string,
-    phone: string,
 
-}
 
 type Status = 'pending' | 'success' | 'error' | 'idle';
 
@@ -39,7 +32,7 @@ export default function EmployeeTable() {
     const [openModal, setOpenModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [pageLoaded, setPageLoaded] = useState(true);
-
+    const [totalPages, setTotalPages] = useState(1);
 
 
     const fetchEmployees = async (number = 1) => {
@@ -115,6 +108,7 @@ export default function EmployeeTable() {
             try {
                 const res = await axios.get('api/employees?page=1', { signal: controller.signal });
                 setEmployees(res.data.data);
+                setTotalPages(res.data.meta.last_page)
                 setStatus('success');
             } catch (err) {
 
@@ -138,7 +132,6 @@ export default function EmployeeTable() {
 
 
 
-
     return (
         <div className="pr-6  pt-6 w-full max-w-6xl mx-auto flex flex-col gap-6">
 
@@ -158,6 +151,11 @@ export default function EmployeeTable() {
                     <Spinner size="xl" />
                 </div>
             )}
+
+            {/* Pagination */}
+            <div className="mt-1 flex ">
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+            </div>
 
             {/* Table */}
             {status === "success" && (
@@ -183,7 +181,7 @@ export default function EmployeeTable() {
                                     <TableCell>{employee.email}</TableCell>
                                     <TableCell>{employee.phone}</TableCell>
 
-                                    <TableCell><Link to={`/companies/${employee.company_id}/details`}>{employee.company_id}</Link></TableCell>
+                                    <TableCell><Link className="hover:text-blue-700" title="Visit company" to={`/companies/${employee.company_id}/details`}>{employee.company?.name}</Link></TableCell>
                                     <TableCell className="flex items-center gap-2">
                                         <Link
                                             to={`/employees/${employee.id}/edit`}
@@ -199,23 +197,32 @@ export default function EmployeeTable() {
                                         </Link>
                                         <Button
                                             size="sm"
-                                            
+
                                             color="red"
-                                            onClick={() => showDeleteModel(employee.id)}
+                                            onClick={() => showDeleteModel(employee.id as number)}
                                         >
                                             Delete
                                         </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
+
+                            {pageLoaded && employees.length === 0 && (
+
+                                <TableRow>
+                                    <TableCell colSpan={4} className="text-center text-lg py-4 text-gray-500">
+                                        No records found
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+
+                            {/* Skeleton loader */}
                             {!pageLoaded && <TableSkeleton />}
                         </TableBody>
                     </Table>
 
-                    {/* Pagination */}
-                    <div className="mt-4 flex justify-center">
-                        <Pagination currentPage={currentPage} totalPages={100} onPageChange={onPageChange} />
-                    </div>
+
                 </div>
             )}
 

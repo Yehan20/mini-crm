@@ -7,7 +7,7 @@ import axios from "../utils/axios";
 import type { Company, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
 
-export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
+export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
 
 
@@ -48,6 +48,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
         website: [],
     }
 
+    // Add the input to the obect
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -68,19 +69,17 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
         setShowAlert(false);
         setErrors(null);
 
-    
 
-        // Front end check
+        // Front end check validation map and make laravel validation based object that we assign if encounter
+        // server errors too
         for (const prop in newCompany) {
 
             const _prop = prop as 'name' | 'email'
-
             // empty
             if (newCompany[_prop] === '' || newCompany[_prop] === null) {
 
                 console.log('true');
                 errorBag[_prop]?.push(`${prop} required`)
-
             }
 
             if (prop === 'email') {
@@ -90,7 +89,6 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
                     errorBag['email']?.push(`invalid email format`)
                 }
             }
-
         }
 
         if (isBagFilled(errorBag)) {
@@ -101,7 +99,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
         setErrors(null);
         setLoading(true);
 
-
+        // Based on mode map the method and then redirect to companies
         try {
             const companyFormData = new FormData();
             companyFormData.append('name', newCompany.name);
@@ -110,20 +108,15 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
 
             if (newCompany.logo instanceof File) companyFormData.append('logo', newCompany.logo);
 
-            if (mode === 'update') {
+            if (mode === 'Update') {
                 companyFormData.append('_method', 'put');
                 await updateCompany(companyFormData);
             }
             else await createCompany(companyFormData);
 
-
-
             setTimeout(() => {
-                navigate('/employees')
-            }, 500)
-
-
-
+                navigate('/companies')
+            }, 1000)
 
         } catch (e) {
             console.log(e);
@@ -140,8 +133,8 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
         }
     }
 
+    // Create Company
     const createCompany = async (formData: FormData) => {
-
 
         const company = await axios.post('api/companies', formData)
 
@@ -154,6 +147,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
         }
     }
 
+    // Update Company
     const updateCompany = async (formData: FormData) => {
 
         const company = await axios.post(`api/companies/${params.id}`, formData)
@@ -192,10 +186,10 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
 
             }
         }
-        if (mode === 'update') {
+        if (mode === 'Update') {
             fetchCompany(params?.id as string);
         }
-        if (mode === 'create') {
+        if (mode === 'Create') {
             setStatus('success');
         }
     }, [mode, params.id])
@@ -211,7 +205,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
     return (
         <div className="flex max-w-md flex-col gap-4">
 
-            {/* Toast message for creation and update of employee*/}
+            {/* Toast message for creation and Update of employee*/}
             {toast.show && (<Toast>
                 <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                     <HiCheck className="h-5 w-5" />
@@ -227,8 +221,8 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
                 >
                     {/* Name */}
                     <div>
-                        <Label htmlFor="name" color="success" className="mb-2 block">
-                            Company name
+                        <Label htmlFor="name"  className="mb-2 block">
+                            Company name*
                         </Label>
                         <TextInput
                             id="name"
@@ -251,7 +245,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
                     {/* Email */}
                     <div>
                         <Label htmlFor="email" className="mb-2 block">
-                            Company email
+                            Company email*
                         </Label>
                         <TextInput
                             id="email"
@@ -274,7 +268,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
                     {/* Website */}
                     <div>
                         <Label htmlFor="website" className="mb-2 block">
-                            Website
+                            Website*
                         </Label>
                         <TextInput
                             id="website"
@@ -297,7 +291,7 @@ export default function CompanyForm({ mode }: { mode: 'create' | 'update' }) {
                     {/* Image */}
                     <div className="max-w-md">
                         <Label className="mb-2 block" htmlFor="logo">
-                            Upload logo
+                            Upload logo (100x100)
                         </Label>
                         <FileInput id="logo" onChange={handleFile} />
                         <div className="mt-2">

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router";

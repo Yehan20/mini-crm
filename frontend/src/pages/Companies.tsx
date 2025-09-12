@@ -1,10 +1,9 @@
-import React from 'react'
 import CompanyTable from '../components/CompanyTable'
 import { Link } from 'react-router'
 
-const Home = () => {
+const Companies = () => {
   return (
-    <>
+   
       <div>
         <div className='flex justify-between items-end-safe pr-5'>
           <h1 className="text-2xl md:text-3xl font-bold  text-gray-800 mb-6">
@@ -19,9 +18,9 @@ const Home = () => {
         <CompanyTable />
       </div>
 
-    </>
+  
 
   )
 }
 
-export default Home
+export default Companies
