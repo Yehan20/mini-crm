@@ -2,6 +2,9 @@
 
 ## Project Description
 
+Mini Crm
+
+-  demo [https://crm.ynprojects.xyz/](https://crm.ynprojects.xyz/)
 
 You can use the following test user to log in:
 
@@ -22,6 +25,10 @@ You can use the following test user to log in:
 - State management: Context Api
 - Database: MySQL 
 - UI Framework: Flowbite + Tailwind CSS
+
+## Assumptions
+- All employees in company deleted when company is deleted
+- Used Soft deletes there for didnot delete company thumbnail when company deleted. if restored  
 
 ## Testing
 - PHP Unit Tests (Feature tests)
@@ -216,7 +223,7 @@ php artisan test
 | Method | Endpoint                 | Description                   |
 |--------|--------------------------|-------------------------------|
 | POST   | `/login`                 | User login                    |
-| POST   | `/sanctum/csrf`          | Csrf Route                    |
+| GET    | `/sanctum/csrf`          | Csrf Route                    |
 | POST   | `/logout`                | User logout                   |
 | GET    | `/api/user`              | Get authenticated user info   |
 | GET    | `/api/companies`         | List all companies Paginated  |
