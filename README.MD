@@ -118,7 +118,7 @@ git remote add origin https://github.com/<your-github-username>/<your-repo-name>
    The API will be available at `http://localhost:8000`.
    
 >  **Note:**  
-> If you use different domian in front end for auth make sure to add it in the statefull domains  in your Laravel `config/sanctum.php` file:  
+> If you use different domian in front end for auth make sure to add it in the statefull domains  in your Laravel `config/sanctum.php` file or in the env file:  
 
 #### Email Server Configuration and queue configuration
 
@@ -214,8 +214,7 @@ cd backend
 php artisan test
 ```
 
->  **Note:**  
-> If you change the test runner's origin (e.g., running the frontend on a different port), be sure to update the `allowed_origins` setting in your Laravel `config/cors.php` file:
+
 
 
 ## Main API Endpoints
