@@ -182,7 +182,7 @@ export default function CompanyTable() {
                                         <TableCell>{company.name}</TableCell>
                                         <TableCell>{company.email}</TableCell>
                                         <TableCell>
-                                            <a title={company.website} href={formatUrl(company.website)} className="text-xs text-blue-500 underline hover:opacity-70" target="_blank">
+                                            <a title={company.website} href={company.website} className="text-xs text-blue-500 underline hover:opacity-70" target="_blank">
                                                 {company.website}
                                             </a>
                                         </TableCell>
