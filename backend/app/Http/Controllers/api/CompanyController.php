@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\api;
 
-use App\actions\CreateCompany;
-use App\actions\UpdateCompany;
+use App\Actions\CreateCompany;
+use App\Actions\UpdateCompany;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyDropwDownResource;
