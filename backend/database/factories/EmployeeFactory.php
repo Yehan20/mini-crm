@@ -18,6 +18,7 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         $companyIds = Company::limit(10)->pluck('id')->toArray();
+
         return [
             //
             'first_name' => fake()->unique()->firstName(),

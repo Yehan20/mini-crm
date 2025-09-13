@@ -28,17 +28,18 @@ class CompanyResource extends JsonResource
             'updated_at' => Carbon::parse($this->updated_at)->toDateTimeString(),
         ];
 
-    
     }
 
     protected function formatLogo(?string $value): ?string
     {
-        if (!$value) {return null;}
+        if (! $value) {
+            return null;
+        }
 
         if (Str::contains($value, 'placehold.co')) {
             return $value;
         }
 
-        return config('app.url') . '/storage/' . $value;
+        return config('app.url').'/storage/'.$value;
     }
 }

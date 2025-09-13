@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -61,7 +60,6 @@ class CompanyTest extends TestCase
             ]);
     }
 
-
     public function test_store_company_and_notify(): void
     {
 
@@ -96,7 +94,7 @@ class CompanyTest extends TestCase
 
         ];
 
-        $response = $this->actingAs($this->user)->putJson('/api/companies/' . $company->id, $newData);
+        $response = $this->actingAs($this->user)->putJson('/api/companies/'.$company->id, $newData);
 
         $response->assertHeader('Content-type', 'application/json')
             ->assertStatus(200)
@@ -115,7 +113,7 @@ class CompanyTest extends TestCase
 
         $company = Company::factory()->create();
 
-        $response = $this->actingAs($this->user)->deleteJson('/api/companies/' . $company->id);
+        $response = $this->actingAs($this->user)->deleteJson('/api/companies/'.$company->id);
 
         $response->assertStatus(204);
 
@@ -140,7 +138,7 @@ class CompanyTest extends TestCase
     {
         $company = Company::factory()->create();
 
-        $response = $this->actingAs($this->user)->putJson('/api/companies/' . $company->id, [
+        $response = $this->actingAs($this->user)->putJson('/api/companies/'.$company->id, [
             'name' => 'test name',
             'website' => 'https://test.com',
             'email' => '',
@@ -183,4 +181,4 @@ class CompanyTest extends TestCase
 
         ];
     }
-} 
+}

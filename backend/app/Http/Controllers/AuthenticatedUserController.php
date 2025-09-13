@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
@@ -19,8 +18,6 @@ class AuthenticatedUserController extends Controller
         $credintials = $request->validated();
 
         if (Auth::attempt($credintials)) {
-
-      
 
             request()->session()->regenerate();
 

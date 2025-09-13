@@ -42,7 +42,7 @@ class AuthTest extends TestCase
             ],
         ]);
 
-        // Logout user 
+        // Logout user
         auth()->logout();
 
         $response = $this->getJson('api/user');

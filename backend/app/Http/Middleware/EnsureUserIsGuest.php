@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsGuest
@@ -21,7 +20,7 @@ class EnsureUserIsGuest
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Authenticated user cannot login'
+                'message' => 'Authenticated user cannot login',
             ], 403);
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\WebsiteRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +14,6 @@ class CompanyRequest extends FormRequest
     {
         return true;
     }
-
 
     protected function prepareForValidation()
     {
