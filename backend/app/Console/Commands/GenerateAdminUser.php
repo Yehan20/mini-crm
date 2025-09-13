@@ -45,6 +45,6 @@ class GenerateAdminUser extends Command
             'is_admin' => true,
         ]);
 
-        $this->info("Admin User created Email:{$user->email} Password:{$this->argument('password')}");
+        $this->info("Admin user created Email:{$user->email} Password:{$this->argument('password')}");
     }
 }
