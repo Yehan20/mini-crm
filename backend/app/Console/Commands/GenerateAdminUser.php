@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Company;
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
@@ -29,7 +31,7 @@ class GenerateAdminUser extends Command
     {
         $email = $this->argument('email');
 
-        if (User::where('email', $email)->first()) {
+        if (User::where('email', $email)->exists() || Company::where('email', $email)->exists() || Employee::where('email', $email)->exists()) {
 
             $this->error('Email already taken.');
 
@@ -44,6 +46,5 @@ class GenerateAdminUser extends Command
         ]);
 
         $this->info("Admin User created Email:{$user->email} Password:{$this->argument('password')}");
-
     }
 }
