@@ -28,7 +28,7 @@ class EmployeeRequest extends FormRequest
             'first_name' => ['required', 'string',  'max:30'],
             'last_name' => ['required', 'string',  'max:30'],
             'company_id' => ['required', 'numeric', 'exists:companies,id'],
-            'email' => ['required', 'string', 'email', 'unique:employees,email'],
+            'email' => ['required', 'string', 'email', 'unique:employees,email','unique:companies,email','unique:users,email'],
             'phone' => ['required', 'string', 'max:20'],
         ];
 
@@ -36,7 +36,7 @@ class EmployeeRequest extends FormRequest
 
             $employee = $this->route('employee');
 
-            $rules['email'] = ['required', 'email', Rule::unique('employees', 'email')->ignore($employee->id)];
+            $rules['email'] = ['required', 'email', Rule::unique('employees', 'email')->ignore($employee->id),'unique:companies,email','unique:users,email'];
 
         }
 

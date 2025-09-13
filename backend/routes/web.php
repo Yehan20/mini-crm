@@ -8,5 +8,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('login', [AuthenticatedUserController::class, 'store'])->middleware(EnsureUserIsGuest::class);
+Route::post('login', [AuthenticatedUserController::class, 'store'])->middleware(['throttle:api', EnsureUserIsGuest::class]);
 Route::post('logout', [AuthenticatedUserController::class, 'destroy'])->middleware('auth:sanctum');

@@ -92,7 +92,7 @@ class CompanyTest extends TestCase
         $newData = [
             'name' => 'My company 2',
             'email' => 'test22@test.com',
-            'website' => 'my2fakecompany.com',
+            'website' => 'https://my2fakecompany.com',
 
         ];
 
@@ -142,7 +142,7 @@ class CompanyTest extends TestCase
 
         $response = $this->actingAs($this->user)->putJson('/api/companies/' . $company->id, [
             'name' => 'test name',
-            'website' => 'test.com',
+            'website' => 'https://test.com',
             'email' => '',
 
         ]);
@@ -178,7 +178,7 @@ class CompanyTest extends TestCase
         return [
             'name' => 'My company',
             'email' => 'test2@test.com',
-            'website' => 'myfakecompany.com',
+            'website' => 'https://myfakecompany.com',
             'logo' => UploadedFile::fake()->image('test-image.jpg', 100, 100),
 
         ];
