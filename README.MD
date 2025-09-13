@@ -18,17 +18,17 @@ You can use the following test user to log in:
 - Company Crud
 - Pagination
 
-
 ## Technology Stack
 - Backend: Laravel (12)
 - Frontend: React Js with TypeScript
-- State management: Context Api
+- State management: Context Api and Local State
 - Database: MySQL 
 - UI Framework: Flowbite + Tailwind CSS
 
 ## Assumptions
 - All employees in company deleted when company is deleted
-- Used Soft deletes there for didnot delete company thumbnail when company deleted. if restored  
+- Used Soft deletes there for does not delete company thumbnail when company deleted.
+- Employee Must have an company no employee cannot be made without a company 
 
 ## Testing
 - PHP Unit Tests (Feature tests)
