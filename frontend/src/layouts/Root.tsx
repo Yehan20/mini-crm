@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { FiHome, FiUsers, FiMenu, FiLogOut, FiX } from "react-icons/fi";
+import { FiHome, FiUsers, FiMenu, FiLogOut } from "react-icons/fi";
 import { FaRegBuilding } from "react-icons/fa";
 
 import { Navigate, NavLink, Outlet, useLocation } from "react-router";
@@ -49,7 +49,7 @@ const Root = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log('object',status,user);
+  console.log('object', status, user);
 
   // Logout the user
   const handleLogout = async () => {
@@ -99,7 +99,7 @@ const Root = () => {
         </div>
 
       </div>
-      <Drawer className="bg-blue-50 not-dark:bg-blue-50"
+      <Drawer className="bg-blue-50"
         backdrop={false}
 
         open={isOpen} onClose={handleClose}>
@@ -107,11 +107,11 @@ const Root = () => {
         <DrawerItems>
           <Sidebar
             aria-label="Sidebar with multi-level dropdown example"
-            className="[&>div]:bg-gray-50 pt-20 h-[70vh] w-full [&>div]:p-0"
+            className="[&>div]:bg-blue-50 pt-20 h-[80vh] w-full [&>div]:p-0"
           >
-            <div className="flex h-full flex-col justify-between py-2">
+            <div className="flex h-full flex-col items-center justify-around py-2">
               <div>
-                <div className="px-4 py-3 border-b border-gray-200 text-center">
+                <div className="px-4 py-3 text-center">
                   <p className="font-semibold text-2xl text-gray-800">{user?.name}</p>
                   <p className="text-gray-600 text-xl">{user?.email}</p>
                   <p className="text-gray-500 text-xs">
@@ -123,12 +123,12 @@ const Root = () => {
 
                 <SidebarItems>
                   <SidebarItemGroup className="px-5">
-                    <SidebarItem as="p" icon={FiHome} active={location.pathname === '/'}>
+                    <SidebarItem  as="p" className="py-3 px-4" icon={FiHome} active={location.pathname === '/'}>
                       <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/">
                         Dashboard
                       </NavLink>
                     </SidebarItem>
-                    <SidebarItem as="p" icon={FaRegBuilding} active={location.pathname === '/companies'}>
+                    <SidebarItem as="p" className="py-3 px-4" icon={FaRegBuilding} active={location.pathname === '/companies'}>
                       <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/companies">
                         Companies
                       </NavLink>
@@ -136,32 +136,26 @@ const Root = () => {
 
 
 
-                    <SidebarItem as="p" icon={FiUsers} active={location.pathname === '/employees'}>
+                    <SidebarItem as="p" className="py-3 px-4" icon={FiUsers} active={location.pathname === '/employees'}>
                       <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/employees">
                         Employees
                       </NavLink>
                     </SidebarItem>
 
-
-
                   </SidebarItemGroup>
-
-                  <SidebarItemGroup>
-
-                    <SidebarItem as="p" >
-                      <Button color={'red'} title="Click" onClick={handleLogout} >
-                        <FiLogOut /> Logout
-                      </Button>
-
-                      <button onClick={() => setIsOpen(false)} className="md:hidden  left-2 top-3  absolute flex items-center z-10 justify-center cursor-pointer">
-                        <FiX color="black " size={20} />
-                      </button>
-
-                    </SidebarItem>
-                  </SidebarItemGroup>
-
                 </SidebarItems>
               </div>
+
+
+              <div  className="">
+                <Button className="cursor-pointer" color={'red'} title="Click" onClick={handleLogout} >
+                  <FiLogOut /> Logout
+                </Button>
+
+              </div>
+
+
+
             </div>
           </Sidebar>
         </DrawerItems>

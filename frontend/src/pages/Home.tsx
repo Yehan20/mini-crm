@@ -3,7 +3,7 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router";
 
-const Dashboard = () => {
+const Home = () => {
   return (
     <div className=" pt-6 w-full max-w-6xl mx-auto">
       {/* Intro Text */}
@@ -52,4 +52,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Home;

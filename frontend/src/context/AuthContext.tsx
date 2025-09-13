@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import axios from "../utils/axios";
 import React, { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import type { AuthProviderProps, Login, AuthStatus, UserProps } from "../types/types";
+import type { AuthProviderProps, LoginUser, AuthStatus, UserProps } from "../types/types";
 
 
 const AuthContext = createContext<AuthProviderProps>({
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
 
-    const login = useCallback(async (credentials: Login) => {
+    const login = useCallback(async (credentials: LoginUser) => {
         try {
             await axios.get("sanctum/csrf-cookie");
             const res = await axios.post("login", credentials);

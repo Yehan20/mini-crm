@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import axios from '../utils/axios';
 
-import { Card, Spinner, Table, Alert, TableRow, TableHead, TableHeadCell, TableBody, TableCell } from "flowbite-react";
+import { Card, Spinner, Table, TableRow, TableHead, TableHeadCell, TableBody, TableCell } from "flowbite-react";
 import type { Company, Status } from "../types/types";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
 
 export default function CompanyCard({ id }: { readonly id: string }) {
-   
-    const {logout} = useAuth();
-    
+
+    const { logout } = useAuth();
+
     const [company, setCompany] = useState<Company | null>(null);
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
@@ -26,17 +27,18 @@ export default function CompanyCard({ id }: { readonly id: string }) {
                 setStatus("success");
             } catch (e) {
                 if (e instanceof AxiosError) {
+                    setStatus("error");
                     setError(e.response?.data.message ?? "Failed to fetch company");
                     if (e.status === 401) await logout();
                 } else {
                     setError("Something went wrong");
                 }
-                setStatus("error");
+
             }
         };
 
         fetchCompany(id);
-    }, [id,logout]);
+    }, [id, logout]);
 
     if (status === "pending") {
         return (
@@ -49,14 +51,12 @@ export default function CompanyCard({ id }: { readonly id: string }) {
     if (status === "error") {
         return (
             <div className="h-[50vh] flex items-center justify-center">
-                <Alert color="failure">
-                    <span className="font-medium text-lg">Error: {error}</span>
-                </Alert>
+                <BaseAlert color="failure" message={error ?? 'error'} />
             </div>
         );
     }
 
-  
+
     if (!company) return null;
 
     return (

@@ -6,12 +6,10 @@ import axios from '../utils/axios';
 import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import TableSkeleton from "./TableSkeleton";
-import type { Employee } from "../types/types";
+import type { Employee, Status } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
-
-
-type Status = 'pending' | 'success' | 'error' | 'idle';
 
 export default function EmployeeTable() {
 
@@ -35,30 +33,44 @@ export default function EmployeeTable() {
     const [showToast, setShowToast] = useState(false);
     const [pageLoaded, setPageLoaded] = useState(true);
     const [totalPages, setTotalPages] = useState(1);
+    const [shouldLogout, setShouldLogout] = useState(false);
 
 
+    // load the paginated 
     const fetchEmployees = async (number = 1) => {
 
-        const companies = await axios.get(`api/employees?page=${number}`);
+        try {
 
-        setEmployees(companies.data.data)
+            const employees = await axios.get(`api/employees?page=${number}`);
+
+            setEmployees(employees.data.data)
+
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                setStatus('error')
+                setError(error.response?.data.message)
+
+                if (error.status === 401) setShouldLogout(true)
+            }
+
+        }
     }
+
 
     const onPageChange = async (page: number) => {
         setPageLoaded(false)
         setCurrentPage(page)
         try {
             await fetchEmployees(page);
+            setPageLoaded(true);
         } catch (error) {
 
             if (error instanceof AxiosError) {
+                setStatus('error')
                 setError(error.response?.data.message)
 
-                if (error.status === 401) await logout();
+                if (error.status === 401) setShouldLogout(true);
             }
-            setStatus('error')
-        } finally {
-            setPageLoaded(true);
         }
 
     };
@@ -94,9 +106,8 @@ export default function EmployeeTable() {
             if (error instanceof AxiosError) {
                 setError(error.response?.data.message)
 
-                if (error.status === 401) await logout();
+                if (error.status === 401) setShouldLogout(true)
             }
-            setStatus('error')
 
         }
     }
@@ -114,15 +125,18 @@ export default function EmployeeTable() {
                 setStatus('success');
             } catch (err) {
 
+
                 if (err instanceof CanceledError) return; // request was canceled
                 if (err instanceof AxiosError) {
 
                     setError(err.response?.data.message ?? 'Failed to fetch employees');
-                    if (err.status === 401) await logout();
+
+                    if (err.status === 401) setShouldLogout(true);
                 } else {
                     setError('Something went wrong');
                 }
                 setStatus('error');
+
             }
         };
 
@@ -132,11 +146,18 @@ export default function EmployeeTable() {
             // abort fetch if component unmounts quickly
             setTimeout(() => controller.abort(), 0);
         };
-    }, [logout]);
+    }, []);
+
+    // checkes for logout
+    useEffect(() => {
+        if (shouldLogout) {
+            logout()
+        }
+    }, [shouldLogout, logout])
 
 
     return (
-        <div className="pr-6  py-6 w-full max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="pr-6  py-6 w-full max-w-6xl flex flex-col gap-6">
 
             {showToast && (
                 <Toast>
@@ -157,9 +178,9 @@ export default function EmployeeTable() {
 
             {/* Table */}
             {status === "success" && (
-                <div className="overflow-x-auto flex justify-center bg-gray-50  rounded-md shadow-md">
+                <div className="overflow-x-auto    rounded-md pb-2">
                     <Table className="w-full" striped>
-                        <TableHead className="bg-white">
+                        <TableHead >
                             <TableRow>
                                 {rows.map((row) => (
                                     <TableHeadCell key={row} className="text-gray-700">
@@ -195,7 +216,7 @@ export default function EmployeeTable() {
                                         </Link>
                                         <Button
                                             size="sm"
-
+                                            className="cursor-pointer"
                                             color="red"
                                             onClick={() => showDeleteModel(employee.id as number)}
                                         >
@@ -224,8 +245,9 @@ export default function EmployeeTable() {
                 </div>
             )}
 
-            {status === "error" && <p className="text-red-500 text-center">{error}</p>}
-
+            {status === "error" && <div className="h-[50vh] flex justify-center items-center">
+                <BaseAlert color="failure" message={error ?? 'Error'} />
+            </div>}
 
 
             {/* Pagination */}

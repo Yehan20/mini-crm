@@ -8,6 +8,7 @@ import type { CompanyDropDown, Employee, ErrorBag, Status } from "../types/types
 import { HiCheck } from "react-icons/hi";
 import { validate } from "../utils/helpers";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
 export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
@@ -90,7 +91,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                     setShowAlert(true);
                     setError(e.response?.data.message);
 
-                    if (e.status === 401) await logout()
+
                 }
             }
 
@@ -134,12 +135,14 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
             } catch (e) {
                 if (e instanceof AxiosError) {
                     console.log(e);
+                    //  runs in both creat and update employee
+                    if (e.status === 401 && mode === 'Create') await logout()
                 }
             }
         }
         fetchDropDown();
 
-    }, []);
+    }, [logout,mode]);
 
     //Runs if the mode is only edit
     useEffect(() => {
@@ -187,9 +190,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
     if (status === 'error') {
         return (
             <div className="h-[50vh] flex items-center justify-center">
-                <Alert color="failure">
-                    <span className="font-medium text-lg">Error: {error}</span>
-                </Alert>
+                 <BaseAlert color="failure" message={error ?? 'error'} />
             </div>
         )
     }
@@ -277,7 +278,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                     </div>
                 </div>
 
-                {/* Website */}
+                {/* Phone */}
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="phone" color="gray">
@@ -328,8 +329,8 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 </div>
 
                 <div>
-                    <Button disabled={loading} type="submit">
-                        {loading ? 'Pleasee wait ...' : `${mode} Employee `}
+                    <Button disabled={loading} className="cursor-pointer" type="submit">
+                        {loading ? 'Please wait ...' : `${mode} Employee `}
                     </Button>
                 </div>
             </form>)}

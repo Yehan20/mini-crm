@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
 import axios from "../utils/axios";
-import { Card, Spinner, Alert } from "flowbite-react";
+import { Card, Spinner } from "flowbite-react";
 import { Link } from "react-router";
 import type { Employee, Status } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
 
 export default function EmployeeCard({ id }: { readonly id: string }) {
-  
-  
-  const {logout} = useAuth();
+
+
+  const { logout } = useAuth();
 
 
   const [employee, setEmployee] = useState<Employee | null>(null);
@@ -30,23 +31,24 @@ export default function EmployeeCard({ id }: { readonly id: string }) {
         setStatus("success");
       }
       catch (e) {
+        setStatus("error");
         if (e instanceof AxiosError) {
-          setError(e.response?.data.message ?? "Failed to fetch employee");
 
+          setError(e.response?.data.message ?? "Failed to fetch employee");
           if (e.status === 401) await logout();
 
         } else {
           setError("Something went wrong");
         }
-        setStatus("error");
+
       }
     };
 
     fetchEmployee(id);
-  }, [id,logout]);
+  }, [id, logout]);
 
   // Lading states
-  
+
   if (status === "pending") {
     return (
       <div className="h-[50vh] flex justify-center items-center">
@@ -58,9 +60,7 @@ export default function EmployeeCard({ id }: { readonly id: string }) {
   if (status === "error") {
     return (
       <div className="h-[50vh] flex items-center justify-center">
-        <Alert color="failure">
-          <span className="font-medium text-lg">Error: {error}</span>
-        </Alert>
+        <BaseAlert color="failure" message={error ?? 'error'} />
       </div>
 
     );

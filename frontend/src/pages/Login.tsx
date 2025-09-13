@@ -1,9 +1,10 @@
-import { Alert, Button, HelperText, Label, TextInput } from "flowbite-react";
+import { Button, HelperText, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { AxiosError } from "axios";
-import type { ErrorBag, Login } from "../types/types";
+import type { ErrorBag, LoginUser } from "../types/types";
 import { validate } from "../utils/helpers";
+import BaseAlert from "../components/ui/BaseAlert";
 
 
 const Login = () => {
@@ -11,7 +12,7 @@ const Login = () => {
 
   const { login } = useAuth();
 
-  const [loginInfo, setLoginInfo] = useState<Login>({
+  const [loginInfo, setLoginInfo] = useState<LoginUser>({
     email: "",
     password: "",
     remember:false
@@ -21,8 +22,6 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<ErrorBag | null>(null);
-
-
 
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,7 +124,7 @@ const Login = () => {
             disabled={loading}
             type="submit"
 
-            className="mt-2"
+            className="mt-2 cursor-pointer"
           >
             {loading ? "Please wait" : "Login"}
           </Button>
@@ -134,9 +133,7 @@ const Login = () => {
 
         {/* Alert if users login wrong */}
         {showAlert && (
-          <Alert color="failure" className="mt-4 text-center">
-            <span className="font-medium">{error}</span>
-          </Alert>
+          <BaseAlert color="failure" message={error}/>
         )}
 
 

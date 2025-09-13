@@ -1,6 +1,6 @@
 
 import { AxiosError } from "axios";
-import { Alert, Button, FileInput, HelperText, Label, Spinner, TextInput, Toast, ToastToggle } from "flowbite-react";
+import { Alert, Button, FileInput, HelperText, Label, Spinner, TextInput, Toast } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, } from "react-router";
 import axios from "../utils/axios";
@@ -8,6 +8,7 @@ import type { Company, ErrorBag, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
 import { validate } from "../utils/helpers";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
 export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
@@ -93,13 +94,19 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
             setLoading(false);
             if (e instanceof AxiosError) {
 
-                if (e.status === 422) setErrors({ ...e.response?.data.errors });
+                // validation code
+                if (e.status === 422) {
+                    setErrors({ ...e.response?.data.errors })
+                    return
+                };
 
-                if (e.status === 401) await logout();
-                else {
-                    setShowAlert(true);
-                    setError(e.response?.data.message);
-                }
+                // logged out
+                if (e.status === 401) return  await logout();
+
+                // Other errors mainly 500
+                setShowAlert(true);
+                setError(e.response?.data.message);
+
             }
 
         }
@@ -162,13 +169,14 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
 
             }
         }
+     
         if (mode === 'Update') {
             fetchCompany(params?.id as string);
         }
         if (mode === 'Create') {
             setStatus('success');
         }
-    }, [mode, params.id, navigate,logout])
+    }, [mode, params.id, navigate, logout])
 
 
 
@@ -185,9 +193,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
     if (status === 'error') {
         return (
             <div className="h-[50vh] flex items-center justify-center">
-                <Alert color="failure">
-                    <span className="font-medium text-lg">Error: {error}</span>
-                </Alert>
+                 <BaseAlert color="failure" message={error ?? 'error'} />
             </div>
         )
     }
@@ -195,13 +201,13 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
     return (
         <div className="flex max-w-md flex-col gap-4">
 
-            {/* Toast message for creation and Update of employee*/}
+            {/* Toast message for creation and Update of company*/}
             {toast.show && (<Toast className="mt-4">
-                <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+                <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500">
                     <HiCheck className="h-5 w-5" />
                 </div>
                 <div className="ml-3 text-sm font-normal">{toast.message}</div>
-                <ToastToggle />
+             
             </Toast>)}
 
             {status === "success" && (
@@ -266,7 +272,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                             name="website"
                             value={newCompany.website}
                             color={errors?.website?.length ? "failure" : "gray"}
-                            placeholder="www.company.com"
+                            placeholder="https://www.company.com"
                             onChange={handleInput}
                         />
                         <div className="mt-2">
@@ -295,7 +301,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
 
                     {/* Submit Button */}
                     <div>
-                        <Button disabled={loading} type="submit" className="mt-2">
+                        <Button disabled={loading} type="submit" className="mt-2 cursor-pointer">
                             {loading ? "Please wait ..." : `${mode} Company`}
                         </Button>
                     </div>

@@ -5,9 +5,10 @@ import Guest from "../layouts/Guest";
 import AuthProvider from "../context/AuthContext";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
+import Login from "../pages/Login";
 
 
-const Login = lazy(() => import('../pages/Login'));
+
 const Companies = lazy(() => import('../pages/Companies'));
 const CompanyCreate = lazy(() => import('../pages/CompanyCreate'));
 const CompanyEdit = lazy(() => import('../pages/CompanyEdit'));

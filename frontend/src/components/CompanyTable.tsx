@@ -8,11 +8,12 @@ import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import type { Company, Status } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
+import BaseAlert from "./ui/BaseAlert";
 
 
 export default function CompanyTable() {
 
-    const{ logout } = useAuth();
+    const { logout } = useAuth();
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -30,14 +31,28 @@ export default function CompanyTable() {
     const [openModal, setOpenModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
+    const [shouldLogout, setShouldLogout] = useState(false);
 
 
     // Fethch company perpage
     const fetchCompaniesPerPage = async (number = 1) => {
 
-        const companies = await axios.get(`api/companies?page=${number}`);
+        try {
 
-        setCompanies(companies.data.data)
+            const companies = await axios.get(`api/companies?page=${number}`);
+
+            setCompanies(companies.data.data)
+
+        } catch (error) {
+            if (error instanceof AxiosError) {
+
+                setStatus('error')
+                setError(error.response?.data.message)
+
+                if (error.status === 401) setShouldLogout(true)
+            }
+
+        }
     }
 
 
@@ -47,16 +62,18 @@ export default function CompanyTable() {
         setCurrentPage(page)
         try {
             await fetchCompaniesPerPage(page);
+            setPageLoaded(true);
         } catch (error) {
 
+            setStatus('error')
             if (error instanceof AxiosError) {
+
                 setError(error.response?.data.message)
 
-                if (error.status === 401) await logout();
+                if (error.status === 401) return setShouldLogout(true)
             }
-            setStatus('error')
-        } finally {
-            setPageLoaded(true);
+            setError('error')
+
         }
 
     };
@@ -88,12 +105,12 @@ export default function CompanyTable() {
         } catch (error) {
 
             if (error instanceof AxiosError) {
+
                 setError(error.response?.data.message)
 
-                if (error.status === 401) await logout();
+                if (error.status === 401) setShouldLogout(true)
 
             }
-            setStatus('error')
 
         }
     }
@@ -124,7 +141,7 @@ export default function CompanyTable() {
                     setError(error.response?.data.message)
                     setStatus('error')
 
-                    if (error.status === 401) await logout();
+                    if (error.status === 401) setShouldLogout(true)
                 }
             }
         }
@@ -142,12 +159,21 @@ export default function CompanyTable() {
     }, [])
 
 
+
+    // checks for logout
+    useEffect(() => {
+        if (shouldLogout) {
+            logout()
+        }
+    }, [shouldLogout, logout])
+
+
     return (
-        <div className="pr-6 pt-6 pb-4 w-full max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="pr-6 pt-6 pb-4 w-full max-w-6xl flex flex-col gap-6">
             {/* Toast */}
             {showToast && (
                 <Toast>
-                    <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+                    <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 ">
                         <HiX className="h-5 w-5" />
                     </div>
                     <div className="ml-3 text-sm font-normal">Company deleted.</div>
@@ -165,7 +191,7 @@ export default function CompanyTable() {
 
             {/* Table */}
             {status === "success" && (
-                <div className="overflow-x-auto justify-center flex   bg-gray-50  rounded-md shadow-md ">
+                <div className="overflow-x-auto    rounded-md flex  pb-2 ">
                     <Table className="w-full" striped>
                         <TableHead >
                             <TableRow >
@@ -181,7 +207,7 @@ export default function CompanyTable() {
                             {/*companies */}
                             {pageLoaded &&
                                 companies.map((company) => (
-                                    <TableRow key={company.id} className="bg-white"
+                                    <TableRow key={company.id}
 
 
                                     >
@@ -216,6 +242,7 @@ export default function CompanyTable() {
                                             <Button
                                                 size="sm"
                                                 color="red"
+                                                className="cursor-pointer"
                                                 onClick={() => showDeleteModel(company.id as number)}
                                             >
                                                 Delete
@@ -250,8 +277,9 @@ export default function CompanyTable() {
             </div>
 
 
-            {status === "error" && <div className="h-[50vh] flex items-center">
-                <p className="text-red-500 text-center">{error}</p></div>}
+            {status === "error" && <div className="h-[50vh] flex justify-center items-center">
+                <BaseAlert color="failure" message={error ?? 'Error'} />
+            </div>}
 
             {/* Delete Modal */}
             <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
@@ -259,7 +287,7 @@ export default function CompanyTable() {
                 <ModalBody>
                     <div className="text-center">
                         <h3 className="mb-5 text-lg font-normal text-gray-500">
-                            Are you sure you want to delete this company all employees in this company will be deleted?
+                            Are you sure you want to delete this company? all employees in this company will be deleted.
                         </h3>
                         <div className="flex justify-center gap-4">
                             <Button

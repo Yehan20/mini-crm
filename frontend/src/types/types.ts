@@ -7,13 +7,13 @@ export interface UserProps {
 export interface AuthProviderProps {
     user: UserProps | null;
     status: AuthStatus;
-    login: (credintials: Login) => Promise<void>;
+    login: (credintials: LoginUser) => Promise<void>;
     logout: () => Promise<void>;
     getUser: () => void;
 }
 
 
-export type Login = {
+export type LoginUser = {
     email: string,
     password: string,
     remember?: boolean
