@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import  { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import axios from '../utils/axios';
 
 import { Card, Spinner, Table, Alert, TableRow, TableHead, TableHeadCell, TableBody, TableCell } from "flowbite-react";
 import type { Company, Status } from "../types/types";
+import { Link } from "react-router";
 
 
 export default function CompanyCard({ id }: { readonly id: string }) {
@@ -35,7 +36,7 @@ export default function CompanyCard({ id }: { readonly id: string }) {
 
     if (status === "pending") {
         return (
-            <div className="flex justify-center items-center h-64">
+            <div className="flex justify-center items-center h-[50vh]">
                 <Spinner size="xl" />
             </div>
         );
@@ -43,19 +44,21 @@ export default function CompanyCard({ id }: { readonly id: string }) {
 
     if (status === "error") {
         return (
-            <Alert color="failure">
-                <span className="font-medium">Error:</span> {error}
-            </Alert>
+            <div className="h-[50vh] flex items-center justify-center">
+                <Alert color="failure">
+                    <span className="font-medium text-lg">Error: {error}</span>
+                </Alert>
+            </div>
         );
     }
 
     if (!company) return null;
 
     return (
-        <div className="space-y-6 pb-6 pr-6">
+        <div className="space-y-6 py-6 pr-6">
             {/* Company Info */}
             <Card>
-                <div className="flex items-center space-x-4">
+                <div className="md:flex items-center space-x-4">
                     {typeof company.logo === "string" && (
                         <img
                             src={company.logo}
@@ -67,7 +70,7 @@ export default function CompanyCard({ id }: { readonly id: string }) {
                         <h2 className="text-2xl font-bold">{company.name}</h2>
                         <p className="text-gray-600">{company.email}</p>
                         <p className="text-blue-600">
-                            <a href={`https://${company.website}`} target="_blank">
+                            <a href={`${company.website}`} target="_blank">
                                 {company.website}
                             </a>
                         </p>
@@ -76,11 +79,12 @@ export default function CompanyCard({ id }: { readonly id: string }) {
             </Card>
 
             {/* Employees Table */}
-            <Card>
+            <Card className="overflow-x-auto ">
                 <h3 className="text-xl font-semibold mb-4">Employees</h3>
-                <Table hoverable>
+                <Table hoverable className="w-full ">
                     <TableHead>
                         <TableRow>
+                            <TableHeadCell>Id</TableHeadCell>
                             <TableHeadCell>First Name</TableHeadCell>
                             <TableHeadCell>Last Name</TableHeadCell>
                             <TableHeadCell>Email</TableHeadCell>
@@ -92,6 +96,12 @@ export default function CompanyCard({ id }: { readonly id: string }) {
                         {company.employees && company.employees.length > 0 ? (
                             company.employees.map((emp) => (
                                 <TableRow key={emp.id} className="bg-white">
+                                    <TableCell>
+                                        <Link to={`/employees/${emp.id}/details`}
+                                            className="text-blue-500 hover:text-gray-700">
+                                            {emp.id}
+                                        </Link></TableCell>
+                                    <TableCell>{emp.first_name}</TableCell>
                                     <TableCell>{emp.first_name}</TableCell>
                                     <TableCell>{emp.last_name}</TableCell>
                                     <TableCell>{emp.email}</TableCell>

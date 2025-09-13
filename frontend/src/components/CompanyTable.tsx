@@ -7,6 +7,7 @@ import TableSkeleton from "./TableSkeleton";
 import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import type { Company, Status } from "../types/types";
+import { formatUrl } from "../utils/helpers";
 
 export default function CompanyTable() {
 
@@ -128,7 +129,6 @@ export default function CompanyTable() {
                 console.log('clean up');
                 controller.abort();
             }, 0)
-
         }
     }, [])
 
@@ -154,18 +154,12 @@ export default function CompanyTable() {
             )}
 
 
-            {/* Pagination */}
-
-            <div className="mt-1 flex ">
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
-            </div>
-
             {/* Table */}
             {status === "success" && (
-                <div className="overflow-x-auto  rounded-lg ">
-                    <Table className="w-full sticky">
+                <div className="overflow-x-auto justify-center flex   bg-gray-50  rounded-md shadow-md ">
+                    <Table className="w-full"  striped>
                         <TableHead >
-                            <TableRow>
+                            <TableRow >
                                 {rows.map((row) => (
                                     <TableHeadCell key={row} className="text-gray-700">
                                         {row}
@@ -178,13 +172,21 @@ export default function CompanyTable() {
                             {/*companies */}
                             {pageLoaded &&
                                 companies.map((company) => (
-                                    <TableRow key={company.id} className="bg-white">
+                                    <TableRow key={company.id} className="bg-white"
+                                    
+                                  
+                                    >
                                         <TableCell className="whitespace-nowrap font-medium text-gray-900">
                                             {company.id}
                                         </TableCell>
                                         <TableCell>{company.name}</TableCell>
                                         <TableCell>{company.email}</TableCell>
-                                        <TableCell>{company.website}</TableCell>
+                                        <TableCell>
+                                            <a title={company.website} href={formatUrl(company.website)} className="text-xs text-blue-500 underline hover:opacity-70" target="_blank">
+                                                {company.website}
+                                            </a>
+                                        </TableCell>
+
                                         <TableCell>
                                             <img src={company.logo as string} alt={company.name} className="h-10 w-10 object-cover rounded" />
                                         </TableCell>
@@ -192,13 +194,13 @@ export default function CompanyTable() {
                                         <TableCell className="flex gap-2 items-center">
                                             <Link
                                                 to={`/companies/${company.id}/edit`}
-                                                className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition text-sm"
+                                                className="px-3 py-2 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition text-sm"
                                             >
                                                 Edit
                                             </Link>
                                             <Link
                                                 to={`/companies/${company.id}/details`}
-                                                className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200 transition text-sm"
+                                                className="px-3 py-2 rounded-md bg-green-100 text-green-700 hover:bg-green-200 transition text-sm"
                                             >
                                                 View
                                             </Link>
@@ -232,7 +234,15 @@ export default function CompanyTable() {
                 </div>
             )}
 
-            {status === "error" && <p className="text-red-500 text-center">{error}</p>}
+            
+           {/* Pagination */}
+            <div className="mb-2 flex justify-center ">
+                {status === "success" && <Pagination className="paginator" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />}
+            </div>
+
+
+            {status === "error" && <div className="h-[50vh] flex items-center">
+                <p className="text-red-500 text-center">{error}</p></div>}
 
             {/* Delete Modal */}
             <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>

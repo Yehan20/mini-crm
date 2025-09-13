@@ -133,7 +133,7 @@ export default function EmployeeTable() {
 
 
     return (
-        <div className="pr-6  pt-6 w-full max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="pr-6  py-6 w-full max-w-6xl mx-auto flex flex-col gap-6">
 
             {showToast && (
                 <Toast>
@@ -147,21 +147,16 @@ export default function EmployeeTable() {
 
             {/* Spinner */}
             {status === "pending" && (
-                <div className="flex items-center justify-center min-h-[50vh]">
+                <div className="flex items-center justify-center min-h-[50vh] ">
                     <Spinner size="xl" />
                 </div>
             )}
 
-            {/* Pagination */}
-            <div className="mt-1 flex ">
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
-            </div>
-
             {/* Table */}
             {status === "success" && (
-                <div className="overflow-x-auto bg-gray-50 p-4 rounded-lg shadow-md">
-                    <Table className="w-full">
-                        <TableHead>
+                <div className="overflow-x-auto flex justify-center bg-gray-50  rounded-md shadow-md">
+                    <Table className="w-full" striped>
+                        <TableHead className="bg-white">
                             <TableRow>
                                 {rows.map((row) => (
                                     <TableHeadCell key={row} className="text-gray-700">
@@ -172,7 +167,7 @@ export default function EmployeeTable() {
                         </TableHead>
                         <TableBody>
                             {pageLoaded && employees.map((employee) => (
-                                <TableRow key={employee.id} className="bg-white">
+                                <TableRow key={employee.id}>
                                     <TableCell className="whitespace-nowrap font-medium text-gray-900">
                                         {employee.id}
                                     </TableCell>
@@ -181,17 +176,17 @@ export default function EmployeeTable() {
                                     <TableCell>{employee.email}</TableCell>
                                     <TableCell>{employee.phone}</TableCell>
 
-                                    <TableCell><Link className="hover:text-blue-700" title="Visit company" to={`/companies/${employee.company_id}/details`}>{employee.company?.name}</Link></TableCell>
+                                    <TableCell><Link className="text-blue-700 font-semibold hover:text-gray-700" title="Visit company" to={`/companies/${employee.company_id}/details`}>{employee.company?.name}</Link></TableCell>
                                     <TableCell className="flex items-center gap-2">
                                         <Link
                                             to={`/employees/${employee.id}/edit`}
-                                            className="px-3 py-2 rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition text-sm"
+                                            className="px-3 py-2 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition text-sm"
                                         >
                                             Edit
                                         </Link>
                                         <Link
                                             to={`/employees/${employee.id}/details`}
-                                            className="px-3 py-2 rounded bg-green-100 text-green-700 hover:bg-green-200 transition text-sm"
+                                            className="px-3 py-2 rounded-md bg-green-100 text-green-700 hover:bg-green-200 transition text-sm"
                                         >
                                             View
                                         </Link>
@@ -229,8 +224,15 @@ export default function EmployeeTable() {
             {status === "error" && <p className="text-red-500 text-center">{error}</p>}
 
 
+            
+            {/* Pagination */}
+            <div className="mb-2 flex justify-center ">
+                {status === "success" && <Pagination className="paginator" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />}
+            </div>
+
+
             {/* Delete Employee Model */}
-            <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+            <Modal show={openModal} size="sm" onClose={() => setOpenModal(false)} popup>
                 <ModalHeader />
                 <ModalBody>
                     <div className="text-center">

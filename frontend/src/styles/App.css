@@ -2,7 +2,7 @@
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../../.flowbite-react/class-list.json";
 
-
+@theme {  --font-display: "Poppins", sans-serif; }
 *,*::before,*::after{
     box-sizing: border-box;
 }
@@ -12,7 +12,34 @@ body{
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: 'Poppins',sans-serif;
 }
 #root{
     min-height: 100vh;
+}
+
+
+
+h1{
+    margin: 0;
+}
+form {
+     margin-top: 20px;
+}
+.paginator  {
+   @apply scale-[0.8] md:scale-[1]
+}
+
+table {
+  @apply table-auto  w-full md:w-[1100px]
+  
+  
+}
+table th,
+table td {
+
+
+font-size: 13px;
+
+
 }

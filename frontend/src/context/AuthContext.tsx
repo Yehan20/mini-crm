@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import axios from "../utils/axios";
 import React, { createContext, useCallback, useEffect, useMemo, useState } from "react";
-import type { AuthProviderProps, LoginProps, authStatus, UserProps } from "../types/types";
+import type { AuthProviderProps, Login, AuthStatus, UserProps } from "../types/types";
 
 
 const AuthContext = createContext<AuthProviderProps>({
@@ -19,14 +19,12 @@ const AuthContext = createContext<AuthProviderProps>({
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [user, setUser] = useState<UserProps | null>(null);
-    const [status, setStatus] = useState<authStatus>('idle');
+    const [status, setStatus] = useState<AuthStatus>('idle');
     const navigate = useNavigate();
 
 
 
-
-
-    const login = useCallback(async (credentials: LoginProps) => {
+    const login = useCallback(async (credentials: Login) => {
         try {
             await axios.get("sanctum/csrf-cookie");
             const res = await axios.post("login", credentials);
@@ -49,7 +47,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         } catch (e) {
             console.log(e);
-            throw e;
+         
         }
     }, [navigate]);
 
@@ -61,7 +59,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (e) {
             console.log("logout", e);
             setStatus("unauthorized");
-            throw e;
+         
         }
     }, []);
 

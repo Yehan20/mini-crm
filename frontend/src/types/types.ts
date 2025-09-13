@@ -1,30 +1,29 @@
-// Auth Context Related types and interfaces
-export interface LoginProps {
-    email: string,
-    password: string,
-    remember?: boolean
-}
-
 export interface UserProps {
     name: string,
     email: string,
     is_admin: boolean,
 }
 
-export type authStatus = 'idle' | 'authenticated' | 'unauthorized' | 'loggedout';
-
 export interface AuthProviderProps {
     user: UserProps | null;
-    status: authStatus;
-    login: (credintials: LoginProps) => Promise<void>;
+    status: AuthStatus;
+    login: (credintials: Login) => Promise<void>;
     logout: () => Promise<void>;
     getUser: () => void;
 }
 
 
+export type Login = {
+    email: string,
+    password: string,
+    remember?: boolean
+}
+
+export type AuthStatus = 'idle' | 'authenticated' | 'unauthorized' | 'loggedout';
+
+
 // Resource loading status
 export type Status = 'pending' | 'success' | 'error' | 'idle';
-
 
 // Emplpoyeer related types
 export type Employee = {
@@ -33,9 +32,9 @@ export type Employee = {
     last_name: string,
     email: string,
     company_id?: number | '',
-    company?:{
-       name:string,
-       id:number
+    company?: {
+        name: string,
+        id: number
     },
     phone: string
 }
@@ -44,15 +43,6 @@ export type CompanyDropDown = {
     id: number,
     name: string
 }
-export type errorBagProp = {
-
-    first_name: string[],
-    last_name: string[],
-    email: string[],
-    phone: string[],
-    company_id: string[]
-};
-
 
 // Company related types
 export type Company = {
@@ -63,13 +53,20 @@ export type Company = {
     logo: File | null | string,
     website: string
     employees?: Employee[];
-    
+
 }
 
+// Validation based types
+export type ErrorBag = {
+    [key: string]: string[];
+}
 
-// Login prop 
-export type LoginPropType = {
-    email: string;
-    password: string;
+export type ValidationObject = { [key: string]: string | number | object | null | boolean }
+
+export type Rules = {
+    emptyFeilds: boolean;
+    emailFormat: boolean;
 };
+
+
 

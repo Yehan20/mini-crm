@@ -6,28 +6,28 @@ const TableSkeleton = () => {
         <React.Fragment>
             {
                 Array.from({ length: 5 }).map((_, i) => (
-                    <TableRow key={i} className="bg-white dark:border-gray-700 dark:bg-gray-800 animate-pulse">
+                    <TableRow key={i} className="bg-white animate-pulse overflow-hidden">
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-32"></div>
                         </TableCell>
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-40"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-40"></div>
                         </TableCell>
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-36"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-36"></div>
                         </TableCell>
                         <TableCell>
-                            <div className="h-10 w-10 bg-gray-200 rounded-full dark:bg-gray-700"></div>
+                            <div className="h-10 w-10 bg-gray-200 rounded-full"></div>
                         </TableCell>
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-12"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-12"></div>
                         </TableCell>
 
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-32"></div>
                         </TableCell>
                         <TableCell>
-                            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-40"></div>
+                            <div className="h-2.5 bg-gray-200 rounded-full w-32"></div>
                         </TableCell>
                     </TableRow>
                 ))

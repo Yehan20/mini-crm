@@ -2,32 +2,28 @@ import { Alert, Button, HelperText, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { AxiosError } from "axios";
-import type { LoginPropType } from "../types/types";
+import type { ErrorBag, Login } from "../types/types";
+import { validate } from "../utils/helpers";
+
 
 const Login = () => {
-  
+
 
   const { login } = useAuth();
-  
-  const [loginInfo, setLoginInfo] = useState<LoginPropType>({
+
+  const [loginInfo, setLoginInfo] = useState<Login>({
     email: "",
     password: "",
+    remember:false
   });
 
   const [showAlert, setShowAlert] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<errorBagProp | null>(null);
+  const [errors, setErrors] = useState<ErrorBag | null>(null);
 
-  type errorBagProp = {
-    password: string[];
-    email: string[];
-  };
 
-  let errorBag: errorBagProp = {
-    email: [],
-    password: [],
-  };
+
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -36,33 +32,23 @@ const Login = () => {
     setLoginInfo({ ...loginInfo, [name]: value });
   };
 
-  const isBagFilled = (obj: errorBagProp) => {
-    return Object.values(obj).some((arr) => arr.length > 0);
-  };
 
+
+
+  // Login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     setShowAlert(false);
     setErrors(null);
 
-    for (const prop in loginInfo) {
-      const _prop = prop as "email" | "password";
+    const { errorBag, errorBagFilled } = validate(loginInfo, {
+      emailFormat: true,
+      emptyFeilds: true,
+    })
 
-      if (loginInfo[_prop] === "") {
-        errorBag[_prop]?.push(`${prop} required`);
-      }
 
-      if (prop === "email") {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (!regex.test(loginInfo.email)) {
-          errorBag["email"]?.push(`invalid email format`);
-        }
-      }
-    }
-
-    if (isBagFilled(errorBag)) {
+    if (errorBagFilled) {
       setErrors({ ...errorBag });
       return;
     }
@@ -75,11 +61,9 @@ const Login = () => {
     } catch (e) {
       setLoading(false);
       if (e instanceof AxiosError) {
-        if (e.status === 422) errorBag = { ...e.response?.data.errors };
-        else {
-          setShowAlert(true);
-          setError(e.response?.data.message);
-        }
+
+        setShowAlert(true);
+        setError(e.response?.data.message);
       }
     }
   };
@@ -92,7 +76,7 @@ const Login = () => {
         </h1>
 
         <form className="flex flex-col gap-4 w-full md:max-w-3xl"
-        onSubmit={handleLogin}
+          onSubmit={handleLogin}
         >
           <div>
             <div className="mb-2 block">
@@ -140,7 +124,7 @@ const Login = () => {
           <Button
             disabled={loading}
             type="submit"
-         
+
             className="mt-2"
           >
             {loading ? "Please wait" : "Login"}
@@ -151,7 +135,7 @@ const Login = () => {
         {/* Alert if users login wrong */}
         {showAlert && (
           <Alert color="failure" className="mt-4 text-center">
-            <span className="font-medium">{error}</span> 
+            <span className="font-medium">{error}</span>
           </Alert>
         )}
 

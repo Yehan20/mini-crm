@@ -11,16 +11,17 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { FiHome, FiUsers, FiMenu, FiLogOut } from "react-icons/fi";
+import { FiHome, FiUsers, FiMenu, FiLogOut, FiX } from "react-icons/fi";
 import { FaRegBuilding } from "react-icons/fa";
 
-import { Link, Navigate, Outlet, } from "react-router";
+import { Navigate, NavLink, Outlet, useLocation } from "react-router";
 
 import { useAuth } from "../hooks/useAuth";
 import Footer from "../components/Footer";
 
 const Root = () => {
   const [isOpen, setIsOpen] = useState(true);
+  const location = useLocation();
 
 
   const handleClose = () => setIsOpen(false);
@@ -52,7 +53,7 @@ const Root = () => {
   const handleLogout = async () => {
     try {
       await logout();
-   
+
     } catch (e) {
       console.log('failed to logout', e);
     }
@@ -71,8 +72,7 @@ const Root = () => {
     return <Navigate to={'/login'} />
   }
 
-  // Active indicator
-  const isActive = (path: string) => location.pathname === path;
+
 
   // Close the drawer during navigation in mobile 
   const handleLinkClick = () => {
@@ -84,11 +84,12 @@ const Root = () => {
 
   return (
     <>
-      <div className=" w-full  py-10   items-center justify-center relative">
+      <div className=" w-full py-14  md:py-10   items-center justify-center relative">
 
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden absolute right-4 top-5 flex items-center justify-center cursor-pointer">
           <FiMenu color="black " size={20} />
         </button>
+
 
         <div className="px-4  md:pl-[350px] max-w-[1600px]">
           <Outlet />
@@ -104,7 +105,7 @@ const Root = () => {
         <DrawerItems>
           <Sidebar
             aria-label="Sidebar with multi-level dropdown example"
-            className="[&>div]:bg-gray-50 h-[70vh] w-full [&>div]:p-0"
+            className="[&>div]:bg-gray-50 pt-20 h-[70vh] w-full [&>div]:p-0"
           >
             <div className="flex h-full flex-col justify-between py-2">
               <div>
@@ -120,23 +121,23 @@ const Root = () => {
 
                 <SidebarItems>
                   <SidebarItemGroup className="px-5">
-                    <SidebarItem as="p" icon={FiHome} active={isActive("/")}>
-                      <Link onClick={handleLinkClick} className="block w-full no-underline" to="/">
+                    <SidebarItem as="p" icon={FiHome} active={location.pathname === '/'}>
+                      <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/">
                         Dashboard
-                      </Link>
+                      </NavLink>
                     </SidebarItem>
-                    <SidebarItem as="p" icon={FaRegBuilding} active={isActive("/companies")}>
-                      <Link onClick={handleLinkClick} className="block w-full no-underline" to="/companies">
+                    <SidebarItem as="p" icon={FaRegBuilding} active={location.pathname === '/companies'}>
+                      <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/companies">
                         Companies
-                      </Link>
+                      </NavLink>
                     </SidebarItem>
 
 
 
-                    <SidebarItem as="p" icon={FiUsers} active={isActive("/employees")}>
-                      <Link onClick={handleLinkClick} className="block w-full no-underline" to="/employees">
+                    <SidebarItem as="p" icon={FiUsers} active={location.pathname === '/employees'}>
+                      <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/employees">
                         Employees
-                      </Link>
+                      </NavLink>
                     </SidebarItem>
 
 
@@ -149,6 +150,11 @@ const Root = () => {
                       <Button color={'red'} title="Click" onClick={handleLogout} >
                         <FiLogOut /> Logout
                       </Button>
+
+                      <button onClick={() => setIsOpen(false)} className="md:hidden  left-2 top-3  absolute flex items-center z-10 justify-center cursor-pointer">
+                        <FiX color="black " size={20} />
+                      </button>
+
                     </SidebarItem>
                   </SidebarItemGroup>
 

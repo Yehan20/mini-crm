@@ -4,13 +4,14 @@ import { Alert, Button, HelperText, Label, Select, Spinner, TextInput, Toast, To
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, } from "react-router";
 import axios from "../utils/axios";
-import type { CompanyDropDown, Employee, errorBagProp, Status } from "../types/types";
+import type { CompanyDropDown, Employee, ErrorBag, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
+import { validate } from "../utils/helpers";
 
 export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
 
-    const [newEmployer, setnewEmployer] = useState<Employee>({
+    const [newEmployee, setnewEmployee] = useState<Employee>({
 
         first_name: '',
         last_name: '',
@@ -22,9 +23,10 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<errorBagProp | null>(null)
+    const [errors, setErrors] = useState<ErrorBag | null>(null)
     const [companyDropDown, setCompanyDropDown] = useState<CompanyDropDown[]>([])
     const [status, setStatus] = useState<Status>('idle');
+
     const [toast, setToast] = useState({
         show: false,
         message: ''
@@ -34,27 +36,12 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
 
     const navigate = useNavigate();
 
-
-
-    const errorBag: errorBagProp = {
-        first_name: [],
-        last_name: [],
-        email: [],
-        phone: [],
-        company_id: []
-    }
-
+    // Set Employee with the different  values from the input 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const name = e.target.name;
         const value = e.target.value;
 
-        setnewEmployer({ ...newEmployer, [name]: value });
-    }
-
-
-    // check if error bag is filled by defualt
-    const isBagFilled = (obj: errorBagProp) => {
-        return Object.values(obj).some(arr => arr.length > 0);
+        setnewEmployee({ ...newEmployee, [name]: value });
     }
 
 
@@ -64,33 +51,17 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
         setShowAlert(false);
         setErrors(null);
 
-        console.log(newEmployer);
+        // Custom front end validator 
+        const { errorBag, errorBagFilled } = validate(newEmployee, {
+            emailFormat: true,
+            emptyFeilds: true,
+        }, [
+            'deleted_at'
+        ]);
 
-        // Front end check
-        for (const prop in newEmployer) {
+        console.log(errorBag);
 
-            const _prop = prop as 'first_name' | 'email' | 'last_name' | 'phone'
-
-            // empty
-            if (newEmployer[_prop] === '' || newEmployer[_prop] === null) {
-
-                errorBag[_prop]?.push(`${prop} required`)
-
-            }
-
-            if (prop === 'email') {
-                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-                if (!regex.test(newEmployer.email)) {
-                    errorBag['email']?.push(`invalid email format`)
-                }
-            }
-
-
-
-        }
-
-        if (isBagFilled(errorBag)) {
+        if (errorBagFilled) {
             setErrors({ ...errorBag });
             return;
         }
@@ -100,14 +71,12 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
 
         try {
 
-            if (mode === 'Update') await updateEmployer(newEmployer);
-            else await createEmployer(newEmployer);
+            if (mode === 'Update') await updateEmployee(newEmployee);
+            else await createEmployee(newEmployee);
 
             setTimeout(() => {
                 navigate('/employees')
             }, 1000)
-
-
 
         } catch (e) {
             console.log(e);
@@ -124,8 +93,8 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
         }
     }
 
-    const createEmployer = async (data: Employee) => {
-
+    // Create employeer and show toast
+    const createEmployee = async (data: Employee) => {
 
         const employee = await axios.post('api/employees', data)
 
@@ -135,14 +104,11 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 show: true,
                 message: 'Employee created'
             })
-
-
-            console.log('made companny');
-
         }
     }
 
-    const updateEmployer = async (data: Employee) => {
+    // Edit employee and show toast
+    const updateEmployee = async (data: Employee) => {
 
         const employee = await axios.put(`api/employees/${params.id}`, data)
 
@@ -158,11 +124,11 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
     //Runs if the mode is only edit
     useEffect(() => {
 
-        const fetchEmployer = async (id: string) => {
+        const fetchEmployee = async (id: string) => {
             setStatus('pending')
             try {
                 const employee = await axios.get(`api/employees/${id}`)
-                setnewEmployer(employee.data.data)
+                setnewEmployee(employee.data.data)
                 setStatus('success')
             } catch (e) {
                 if (e instanceof AxiosError) {
@@ -184,14 +150,13 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                     console.log(e);
 
                 }
-
             }
         }
 
         fetchDropDown();
 
         if (mode === 'Update') {
-            fetchEmployer(params?.id as string);
+            fetchEmployee(params?.id as string);
         }
 
         if (mode === 'Create') {
@@ -202,35 +167,47 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
 
 
     if (status === 'pending') {
-        return <div className="flex justify-center min-h-screen">
+        return <div className="flex items-center justify-center h-[50vh]">
             <Spinner size="xl" />
         </div>
     }
+
+    // failure
+    if (status === 'error') {
+        return (
+            <div className="h-[50vh] flex items-center justify-center">
+                <Alert color="failure">
+                    <span className="font-medium text-lg">Error: {error}</span>
+                </Alert>
+            </div>
+        )
+    }
+
 
     return (
         <div className="flex max-w-md flex-col gap-4">
 
             {/* Toast message for creation and update of employee*/}
-            {toast.show && (<Toast>
+            {toast.show && (<Toast className="mt-5 w-[500px]" >
                 <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                     <HiCheck className="h-5 w-5" />
                 </div>
-                <div className="ml-3 text-sm font-normal">{toast.message} Navigating.. to Employees page</div>
+                <div className="ml-3 text-sm font-normal">{toast.message}</div>
                 <ToastToggle />
             </Toast>)}
 
 
 
 
-            {status === 'success' && (<form onSubmit={handleSave} className="flex min-w-2xl w-full  p-6  flex-col gap-4 bg-gray-50 rounded-lg">
+            {status === 'success' && (<form onSubmit={handleSave} className="flex w-full md:w-3xl  p-6  flex-col gap-4 bg-gray-50 rounded-lg">
                 {/* First Name */}
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="first_name" >
-                            Employee First Name*
+                            First name*
                         </Label>
                     </div>
-                    <TextInput id="first_name" type="text" name="first_name" value={newEmployer.first_name}
+                    <TextInput id="first_name" type="text" name="first_name" value={newEmployee.first_name}
                         color={errors?.first_name?.length ? 'failure' : 'gray'}
                         placeholder="John" onChange={(e) => handleInput(e)} />
 
@@ -249,10 +226,10 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="name" >
-                            Employee Last Name*
+                            Last name*
                         </Label>
                     </div>
-                    <TextInput id="last_name" type="text" name="last_name" value={newEmployer.last_name}
+                    <TextInput id="last_name" type="text" name="last_name" value={newEmployee.last_name}
                         color={errors?.last_name?.length ? 'failure' : 'gray'}
                         placeholder="Doe"
                         onChange={(e) => handleInput(e)} />
@@ -272,9 +249,9 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 {/* Email */}
                 <div>
                     <div className="mb-2 block">
-                        <Label htmlFor="email">Employee email*</Label>
+                        <Label htmlFor="email">Email*</Label>
                     </div>
-                    <TextInput id="email" type="email" name="email" value={newEmployer.email}
+                    <TextInput id="email" type="text" name="email" value={newEmployee.email}
                         color={errors?.email?.length ? 'failure' : 'gray'}
                         placeholder="name@test.com" onChange={(e) => handleInput(e)} />
 
@@ -297,7 +274,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                         </Label>
                     </div>
 
-                    <TextInput id="phone" type="phone" name="phone" value={newEmployer.phone}
+                    <TextInput id="phone" type="phone" name="phone" value={newEmployee.phone}
                         color={errors?.phone?.length ? 'failure' : 'gray'}
                         placeholder="07xxxxxxx" onChange={(e) => handleInput(e)} />
 
@@ -319,7 +296,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                     <div className="mb-2 block">
                         <Label htmlFor="company_id">Select Company*</Label>
                     </div>
-                    <Select id="company_id" name="company_id" value={newEmployer.company_id} onChange={(e) => handleInput(e)}>
+                    <Select id="company_id" name="company_id" value={newEmployee.company_id} onChange={(e) => handleInput(e)}>
                         <option value='' disabled>Select</option>
                         {Array.isArray(companyDropDown) && companyDropDown.map((dropdown) => (
                             <option value={dropdown.id} key={dropdown.id}>
@@ -346,11 +323,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 </div>
             </form>)}
 
-
-            {status === 'error' && <p className="text-red-500 text-2xl">{error}</p>}
-
-
-            {/* Show Aler */}
+            {/*error when creation or update */}
             {showAlert && <Alert color="failure">
                 <span className="font-medium">{error}</span>
             </Alert>}

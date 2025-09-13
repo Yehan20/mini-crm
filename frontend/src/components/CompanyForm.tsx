@@ -4,8 +4,9 @@ import { Alert, Button, FileInput, HelperText, Label, Spinner, TextInput, Toast,
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, } from "react-router";
 import axios from "../utils/axios";
-import type { Company, Status } from "../types/types";
+import type { Company, ErrorBag, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
+import { validate } from "../utils/helpers";
 
 export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
@@ -21,7 +22,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
     const [showAlert, setShowAlert] = useState(false);
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<errorBagProp | null>(null)
+    const [errors, setErrors] = useState<ErrorBag | null>(null);
 
     const [status, setStatus] = useState<Status>('idle');
     const params = useParams();
@@ -33,20 +34,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
         message: ''
     });
 
-    type errorBagProp = {
 
-        name: string[],
-        email: string[],
-        logo: string[],
-        website: string[],
-    };
-
-    const errorBag: errorBagProp = {
-        name: [],
-        email: [],
-        logo: [],
-        website: [],
-    }
 
     // Add the input to the obect
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,41 +45,22 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
     }
 
 
-    // check if error bag is filled by defualt
-    const isBagFilled = (obj: errorBagProp) => {
-        return Object.values(obj).some(arr => arr.length > 0);
-    }
 
-
+    // create or update 
     const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         setShowAlert(false);
         setErrors(null);
 
+        //validate  
+        const { errorBag, errorBagFilled } = validate(newCompany, {
+            emailFormat: true,
+            emptyFeilds: true,
+        }, ['deleted_at'])
 
-        // Front end check validation map and make laravel validation based object that we assign if encounter
-        // server errors too
-        for (const prop in newCompany) {
 
-            const _prop = prop as 'name' | 'email'
-            // empty
-            if (newCompany[_prop] === '' || newCompany[_prop] === null) {
-
-                console.log('true');
-                errorBag[_prop]?.push(`${prop} required`)
-            }
-
-            if (prop === 'email') {
-                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-                if (!regex.test(newCompany.email)) {
-                    errorBag['email']?.push(`invalid email format`)
-                }
-            }
-        }
-
-        if (isBagFilled(errorBag)) {
+        if (errorBagFilled) {
             setErrors({ ...errorBag });
             return;
         }
@@ -195,22 +164,34 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
     }, [mode, params.id])
 
 
+    // Pending
     if (status === 'pending') {
 
-        return <div className="flex justify-center min-h-screen">
+        return <div className="flex justify-center items-center h-[50vh]">
             <Spinner size="xl" />
         </div>
     }
 
+    // failure
+    if (status === 'error') {
+        return (
+            <div className="h-[50vh] flex items-center justify-center">
+                <Alert color="failure">
+                    <span className="font-medium text-lg">Error: {error}</span>
+                </Alert>
+            </div>
+        )
+    }
+    
     return (
         <div className="flex max-w-md flex-col gap-4">
 
             {/* Toast message for creation and Update of employee*/}
-            {toast.show && (<Toast>
+            {toast.show && (<Toast className="mt-4">
                 <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                     <HiCheck className="h-5 w-5" />
                 </div>
-                <div className="ml-3 text-sm font-normal">{toast.message} Navigating.. to Companies page</div>
+                <div className="ml-3 text-sm font-normal">{toast.message}</div>
                 <ToastToggle />
             </Toast>)}
 
@@ -221,7 +202,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                 >
                     {/* Name */}
                     <div>
-                        <Label htmlFor="name"  className="mb-2 block">
+                        <Label htmlFor="name" className="mb-2 block">
                             Company name*
                         </Label>
                         <TextInput
@@ -304,15 +285,16 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                     </div>
 
                     {/* Submit Button */}
-                    <Button disabled={loading} type="submit" className="mt-2">
-                        {loading ? "Please wait ..." : `${mode} company`}
-                    </Button>
+                    <div>
+                        <Button disabled={loading} type="submit" className="mt-2">
+                            {loading ? "Please wait ..." : `${mode} Company`}
+                        </Button>
+                    </div>
+
                 </form>
             )}
 
-            {status === "error" && (
-                <p className="text-center text-red-500 font-semibold mt-4">{error}</p>
-            )}
+
 
             {showAlert && (
                 <Alert color="failure" className="mt-4">
