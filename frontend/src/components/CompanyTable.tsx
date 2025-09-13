@@ -7,7 +7,7 @@ import TableSkeleton from "./TableSkeleton";
 import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import type { Company, Status } from "../types/types";
-import { formatUrl } from "../utils/helpers";
+
 
 export default function CompanyTable() {
 
