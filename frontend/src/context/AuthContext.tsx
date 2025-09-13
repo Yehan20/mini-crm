@@ -40,14 +40,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const logout = useCallback(async () => {
         try {
             await axios.post("logout");
+        } catch (e) {
+            console.log(e);
+
+        } finally {
             setStatus("loggedout");
             setUser(null);
             navigate("/login", { replace: true });
-            navigate(0) //refresh page extra layer proection
-
-        } catch (e) {
-            console.log(e);
-         
+          //  navigate(0) //refresh page extra layer proection
         }
     }, [navigate]);
 
@@ -59,7 +59,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (e) {
             console.log("logout", e);
             setStatus("unauthorized");
-         
+
         }
     }, []);
 

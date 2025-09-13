@@ -7,6 +7,7 @@ import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import TableSkeleton from "./TableSkeleton";
 import type { Employee } from "../types/types";
+import { useAuth } from "../hooks/useAuth";
 
 
 
@@ -14,6 +15,7 @@ type Status = 'pending' | 'success' | 'error' | 'idle';
 
 export default function EmployeeTable() {
 
+    const { logout } = useAuth();
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,8 +44,6 @@ export default function EmployeeTable() {
         setEmployees(companies.data.data)
     }
 
-
-
     const onPageChange = async (page: number) => {
         setPageLoaded(false)
         setCurrentPage(page)
@@ -53,15 +53,15 @@ export default function EmployeeTable() {
 
             if (error instanceof AxiosError) {
                 setError(error.response?.data.message)
+
+                if (error.status === 401) await logout();
             }
             setStatus('error')
         } finally {
             setPageLoaded(true);
         }
 
-
     };
-
 
     // Show delete model
     const showDeleteModel = async (id: number) => {
@@ -93,6 +93,8 @@ export default function EmployeeTable() {
 
             if (error instanceof AxiosError) {
                 setError(error.response?.data.message)
+
+                if (error.status === 401) await logout();
             }
             setStatus('error')
 
@@ -114,7 +116,9 @@ export default function EmployeeTable() {
 
                 if (err instanceof CanceledError) return; // request was canceled
                 if (err instanceof AxiosError) {
+
                     setError(err.response?.data.message ?? 'Failed to fetch employees');
+                    if (err.status === 401) await logout();
                 } else {
                     setError('Something went wrong');
                 }
@@ -128,8 +132,7 @@ export default function EmployeeTable() {
             // abort fetch if component unmounts quickly
             setTimeout(() => controller.abort(), 0);
         };
-    }, []);
-
+    }, [logout]);
 
 
     return (
@@ -224,7 +227,7 @@ export default function EmployeeTable() {
             {status === "error" && <p className="text-red-500 text-center">{error}</p>}
 
 
-            
+
             {/* Pagination */}
             <div className="mb-2 flex justify-center ">
                 {status === "success" && <Pagination className="paginator" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />}

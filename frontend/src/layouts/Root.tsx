@@ -49,6 +49,8 @@ const Root = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  console.log('object',status,user);
+
   // Logout the user
   const handleLogout = async () => {
     try {
@@ -67,7 +69,7 @@ const Root = () => {
     </div>
   }
 
-  if (status === 'unauthorized') {
+  if (status === 'unauthorized' || status === 'loggedout') {
 
     return <Navigate to={'/login'} />
   }

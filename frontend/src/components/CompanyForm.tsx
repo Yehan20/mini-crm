@@ -7,10 +7,11 @@ import axios from "../utils/axios";
 import type { Company, ErrorBag, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
 import { validate } from "../utils/helpers";
+import { useAuth } from "../hooks/useAuth";
 
 export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
-
+    const { logout } = useAuth()
 
     const [newCompany, setnewCompany] = useState<Company>({
         name: '',
@@ -93,6 +94,8 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
             if (e instanceof AxiosError) {
 
                 if (e.status === 422) setErrors({ ...e.response?.data.errors });
+
+                if (e.status === 401) await logout();
                 else {
                     setShowAlert(true);
                     setError(e.response?.data.message);
@@ -149,8 +152,12 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
             } catch (e) {
                 if (e instanceof AxiosError) {
                     console.log(e);
+
                     setError(e.response?.data.message)
                     setStatus('error')
+
+                    // if logged out in another tab
+                    if (e.status === 401) await logout();
                 }
 
             }
@@ -161,7 +168,9 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
         if (mode === 'Create') {
             setStatus('success');
         }
-    }, [mode, params.id])
+    }, [mode, params.id, navigate,logout])
+
+
 
 
     // Pending
@@ -182,7 +191,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
             </div>
         )
     }
-    
+
     return (
         <div className="flex max-w-md flex-col gap-4">
 

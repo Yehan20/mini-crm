@@ -7,9 +7,11 @@ import axios from "../utils/axios";
 import type { CompanyDropDown, Employee, ErrorBag, Status } from "../types/types";
 import { HiCheck } from "react-icons/hi";
 import { validate } from "../utils/helpers";
+import { useAuth } from "../hooks/useAuth";
 
 export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Update' }) {
 
+    const { logout } = useAuth();
 
     const [newEmployee, setnewEmployee] = useState<Employee>({
 
@@ -26,6 +28,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
     const [errors, setErrors] = useState<ErrorBag | null>(null)
     const [companyDropDown, setCompanyDropDown] = useState<CompanyDropDown[]>([])
     const [status, setStatus] = useState<Status>('idle');
+
 
     const [toast, setToast] = useState({
         show: false,
@@ -59,8 +62,6 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
             'deleted_at'
         ]);
 
-        console.log(errorBag);
-
         if (errorBagFilled) {
             setErrors({ ...errorBag });
             return;
@@ -84,9 +85,12 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
             if (e instanceof AxiosError) {
 
                 if (e.status === 422) setErrors({ ...e.response?.data.errors });
+
                 else {
                     setShowAlert(true);
                     setError(e.response?.data.message);
+
+                    if (e.status === 401) await logout()
                 }
             }
 
@@ -121,6 +125,22 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
         }
     }
 
+    useEffect(() => {
+        const fetchDropDown = async () => {
+            try {
+                const employee = await axios.get(`api/companies?dropdown=true`)
+                setCompanyDropDown(employee.data.data)
+
+            } catch (e) {
+                if (e instanceof AxiosError) {
+                    console.log(e);
+                }
+            }
+        }
+        fetchDropDown();
+
+    }, []);
+
     //Runs if the mode is only edit
     useEffect(() => {
 
@@ -135,25 +155,14 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                     console.log(e);
                     setError(e.response?.data.message)
                     setStatus('error')
+
+                    //logged out in a another tab logout the user
+                    if (e.status === 401) await logout();
+
                 }
 
             }
         }
-        const fetchDropDown = async () => {
-
-            try {
-                const employee = await axios.get(`api/companies?dropdown=true`)
-                setCompanyDropDown(employee.data.data)
-
-            } catch (e) {
-                if (e instanceof AxiosError) {
-                    console.log(e);
-
-                }
-            }
-        }
-
-        fetchDropDown();
 
         if (mode === 'Update') {
             fetchEmployee(params?.id as string);
@@ -163,7 +172,9 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
             setStatus('success')
         }
 
-    }, [mode, params.id])
+    }, [mode, params.id, logout])
+
+
 
 
     if (status === 'pending') {

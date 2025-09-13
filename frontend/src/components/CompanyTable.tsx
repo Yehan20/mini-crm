@@ -7,10 +7,12 @@ import TableSkeleton from "./TableSkeleton";
 import { Link } from "react-router";
 import { HiX } from "react-icons/hi";
 import type { Company, Status } from "../types/types";
+import { useAuth } from "../hooks/useAuth";
 
 
 export default function CompanyTable() {
 
+    const{ logout } = useAuth();
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -49,6 +51,8 @@ export default function CompanyTable() {
 
             if (error instanceof AxiosError) {
                 setError(error.response?.data.message)
+
+                if (error.status === 401) await logout();
             }
             setStatus('error')
         } finally {
@@ -85,6 +89,9 @@ export default function CompanyTable() {
 
             if (error instanceof AxiosError) {
                 setError(error.response?.data.message)
+
+                if (error.status === 401) await logout();
+
             }
             setStatus('error')
 
@@ -116,6 +123,8 @@ export default function CompanyTable() {
                     console.log('error');
                     setError(error.response?.data.message)
                     setStatus('error')
+
+                    if (error.status === 401) await logout();
                 }
             }
         }
@@ -157,7 +166,7 @@ export default function CompanyTable() {
             {/* Table */}
             {status === "success" && (
                 <div className="overflow-x-auto justify-center flex   bg-gray-50  rounded-md shadow-md ">
-                    <Table className="w-full"  striped>
+                    <Table className="w-full" striped>
                         <TableHead >
                             <TableRow >
                                 {rows.map((row) => (
@@ -173,8 +182,8 @@ export default function CompanyTable() {
                             {pageLoaded &&
                                 companies.map((company) => (
                                     <TableRow key={company.id} className="bg-white"
-                                    
-                                  
+
+
                                     >
                                         <TableCell className="whitespace-nowrap font-medium text-gray-900">
                                             {company.id}
@@ -234,8 +243,8 @@ export default function CompanyTable() {
                 </div>
             )}
 
-            
-           {/* Pagination */}
+
+            {/* Pagination */}
             <div className="mb-2 flex justify-center ">
                 {status === "success" && <Pagination className="paginator" currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />}
             </div>

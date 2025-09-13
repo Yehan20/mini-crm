@@ -4,11 +4,14 @@ import axios from "../utils/axios";
 import { Card, Spinner, Alert } from "flowbite-react";
 import { Link } from "react-router";
 import type { Employee, Status } from "../types/types";
-
-
+import { useAuth } from "../hooks/useAuth";
 
 
 export default function EmployeeCard({ id }: { readonly id: string }) {
+  
+  
+  const {logout} = useAuth();
+
 
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [status, setStatus] = useState<Status>("idle");
@@ -29,6 +32,9 @@ export default function EmployeeCard({ id }: { readonly id: string }) {
       catch (e) {
         if (e instanceof AxiosError) {
           setError(e.response?.data.message ?? "Failed to fetch employee");
+
+          if (e.status === 401) await logout();
+
         } else {
           setError("Something went wrong");
         }
@@ -37,8 +43,10 @@ export default function EmployeeCard({ id }: { readonly id: string }) {
     };
 
     fetchEmployee(id);
-  }, [id]);
+  }, [id,logout]);
 
+  // Lading states
+  
   if (status === "pending") {
     return (
       <div className="h-[50vh] flex justify-center items-center">

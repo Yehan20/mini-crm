@@ -5,10 +5,13 @@ import axios from '../utils/axios';
 import { Card, Spinner, Table, Alert, TableRow, TableHead, TableHeadCell, TableBody, TableCell } from "flowbite-react";
 import type { Company, Status } from "../types/types";
 import { Link } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
 
 export default function CompanyCard({ id }: { readonly id: string }) {
-
+   
+    const {logout} = useAuth();
+    
     const [company, setCompany] = useState<Company | null>(null);
     const [status, setStatus] = useState<Status>("idle");
     const [error, setError] = useState<string | null>(null);
@@ -24,6 +27,7 @@ export default function CompanyCard({ id }: { readonly id: string }) {
             } catch (e) {
                 if (e instanceof AxiosError) {
                     setError(e.response?.data.message ?? "Failed to fetch company");
+                    if (e.status === 401) await logout();
                 } else {
                     setError("Something went wrong");
                 }
@@ -32,7 +36,7 @@ export default function CompanyCard({ id }: { readonly id: string }) {
         };
 
         fetchCompany(id);
-    }, [id]);
+    }, [id,logout]);
 
     if (status === "pending") {
         return (
@@ -52,6 +56,7 @@ export default function CompanyCard({ id }: { readonly id: string }) {
         );
     }
 
+  
     if (!company) return null;
 
     return (
