@@ -25,11 +25,11 @@ You can use the following test user to log in:
 - Database: MySQL 
 - UI Framework: Flowbite + Tailwind CSS
 
-## Assumptions
-- All employees in company deleted when company is deleted
-- Used Soft deletes there for does not delete company thumbnail when company deleted.
-- Employee Must have an company no employee cannot be made without a company 
-- As per requirment email feild is not required. email is sent only to admin user
+## Assumptions and notes
+- All employees of a company  is deleted when company is deleted
+- Soft deletes are used, so the company’s logo is not deleted permenantly when the company is deleted.
+- Employee must have an company. no employee cannot be made without a company 
+- Since the company email not mentioned required. email notifications are sent only to the admin user, not to the company
 
 ## Testing
 - PHP Unit Tests (Feature tests)
@@ -119,7 +119,7 @@ git remote add origin https://github.com/<your-github-username>/<your-repo-name>
    The API will be available at `http://localhost:8000`.
    
 >  **Note:**  
-> If you use different domian in front end for auth make sure to add it in the statefull domains  in your Laravel `config/sanctum.php` file or in the env file:  
+> If you use different domian in frontend for auth make sure to add it in the statefull domains  in your Laravel `config/sanctum.php` file or in the env file :  
 
 #### Email Server Configuration and queue configuration
 
@@ -137,7 +137,7 @@ git remote add origin https://github.com/<your-github-username>/<your-repo-name>
    MAIL_PASSWORD= REPLACE WITH YOUR KEY
 
    ```
-3. Once All is configured you can run your queue worker to begin the waiting for any dispatched jobs 
+3. Once all is configured you can run your queue worker to begin the waiting for any dispatched jobs 
    ```bash
    php artisan queue:work 
 
@@ -145,7 +145,7 @@ git remote add origin https://github.com/<your-github-username>/<your-repo-name>
 
 #### Generating Admin user
 
-1. If you want to create an admin user you can use command and enter the options
+1. If you want to create an admin user you can use command and enter the options also when you seed a defualt admin is made
    ```bash
    php artisan admin:generate {name} {email} {password} 
    ```
