@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Jobs\ProcessCompany;
+use App\Jobs\SendCompanyCreatedMail;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
@@ -34,7 +34,7 @@ class CreateCompany
             ])
         );
 
-        ProcessCompany::dispatch($company, $user);
+        SendCompanyCreatedMail::dispatch($company, $user);
 
         return $company;
     }
