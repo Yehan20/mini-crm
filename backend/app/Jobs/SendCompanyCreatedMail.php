@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
 
-class ProcessCompany implements ShouldQueue
+class SendCompanyCreatedMail implements ShouldQueue
 {
     use Queueable;
 
