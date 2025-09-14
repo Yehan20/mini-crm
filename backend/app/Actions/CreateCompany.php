@@ -8,6 +8,7 @@ use App\Jobs\SendCompanyCreatedMail;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 class CreateCompany
 {
@@ -28,14 +29,16 @@ class CreateCompany
             $path = $file->store('logos', 'public');
         }
 
-        $company = Company::query()->create(
-            array_merge($attributes, [
-                'logo' => $path,
-            ])
-        );
+        return DB::transaction(function () use ($attributes, $path, $user) {
+            $company = Company::query()->create(
+                array_merge($attributes, [
+                    'logo' => $path,
+                ])
+            );
 
-        SendCompanyCreatedMail::dispatch($company, $user);
+            SendCompanyCreatedMail::dispatch($company, $user); // enabled after commit in comany
 
-        return $company;
+            return $company;
+        });
     }
 }

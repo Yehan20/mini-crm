@@ -24,7 +24,7 @@ class UpdateCompany
         if ($file) {
 
             // delete the existing file if it exists previously
-            if ($company->logo) {
+            if ($company->logo && Storage::disk('public')->exists($company->logo)) {
                 Storage::disk('public')->delete($company->logo);
             }
 
