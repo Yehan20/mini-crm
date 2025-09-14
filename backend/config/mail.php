@@ -111,13 +111,13 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', '"admin@crm.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@crm.com'),
         'name' => env('MAIL_FROM_NAME', 'Admin CRM'),
     ],
 
     'reply_to' => [
 
-        'address' => env('MAIL_FROM_ADDRESS', '"admin@crm.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@crm.com'),
         'name' => env('MAIL_FROM_NAME', 'Admin CRM'),
     ],
 
