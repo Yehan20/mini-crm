@@ -66,6 +66,7 @@ export type ValidationObject = { [key: string]: string | number | object | null 
 export type Rules = {
     emptyFeilds: boolean;
     emailFormat: boolean;
+    phoneFormat?:boolean
 };
 
 

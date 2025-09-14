@@ -18,12 +18,12 @@ export const validate = (value: ValidationObject, rule: Rules, ignore?: string[]
 
         // empty rule
         if (!(ignore?.includes(prop)) && rule.emptyFeilds && (value[prop] === "" || value[prop] === null)) {
-            console.log(prop,ignore);
+            console.log(prop, ignore);
             errorBag[prop].push(`${prop} required`);
         }
 
         // email rule
-        if (rule.emailFormat && prop === "email") {
+        if (rule.emailFormat && value[prop] && prop === "email") {
 
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -32,7 +32,18 @@ export const validate = (value: ValidationObject, rule: Rules, ignore?: string[]
                 errorBag["email"].push(`invalid email format`);
             }
         }
+
+        if (rule.phoneFormat && value[prop] && prop === "phone") {
+
+            const regex = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
+
+            if (!regex.test(value[prop] as string)) {
+
+                errorBag["phone"].push(`invalid phone number format`);
+            }
+        }
         //  can add more rules
+       
     }
 
     // check if the bag is filled 

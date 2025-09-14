@@ -57,10 +57,13 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
 
         // Custom front end validator 
         const { errorBag, errorBagFilled } = validate(newEmployee, {
-            emailFormat: true,
+            emailFormat: false,
             emptyFeilds: true,
+            // phoneFormat: true,
         }, [
-            'deleted_at'
+            'deleted_at',
+            'email',
+            'phone'
         ]);
 
         if (errorBagFilled) {
@@ -142,7 +145,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
         }
         fetchDropDown();
 
-    }, [logout,mode]);
+    }, [logout, mode]);
 
     //Runs if the mode is only edit
     useEffect(() => {
@@ -190,7 +193,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
     if (status === 'error') {
         return (
             <div className="h-[50vh] flex items-center justify-center">
-                 <BaseAlert color="failure" message={error ?? 'error'} />
+                <BaseAlert color="failure" message={error ?? 'error'} />
             </div>
         )
     }
@@ -200,7 +203,7 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
         <div className="flex max-w-md flex-col gap-4">
 
             {/* Toast message for creation and update of employee*/}
-            {toast.show && (<Toast className="mt-5 w-[500px]" >
+            {toast.show && (<Toast className="mt-5 w-[300px] md:w-[500px]" >
                 <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                     <HiCheck className="h-5 w-5" />
                 </div>
@@ -261,9 +264,9 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 {/* Email */}
                 <div>
                     <div className="mb-2 block">
-                        <Label htmlFor="email">Email*</Label>
+                        <Label htmlFor="email">Email (optional)</Label>
                     </div>
-                    <TextInput id="email" type="text" name="email" value={newEmployee.email}
+                    <TextInput id="email" type="text" name="email" value={newEmployee.email ?? ''}
                         color={errors?.email?.length ? 'failure' : 'gray'}
                         placeholder="name@test.com" onChange={(e) => handleInput(e)} />
 
@@ -282,11 +285,11 @@ export default function EmployeeForm({ mode }: { readonly mode: 'Create' | 'Upda
                 <div>
                     <div className="mb-2 block">
                         <Label htmlFor="phone" color="gray">
-                            Phone*
+                            Phone (optional)
                         </Label>
                     </div>
 
-                    <TextInput id="phone" type="phone" name="phone" value={newEmployee.phone}
+                    <TextInput id="phone" type="phone" name="phone" value={newEmployee.phone ?? ''}
                         color={errors?.phone?.length ? 'failure' : 'gray'}
                         placeholder="07xxxxxxx" onChange={(e) => handleInput(e)} />
 

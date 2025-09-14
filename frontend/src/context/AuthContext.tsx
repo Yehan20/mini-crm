@@ -22,35 +22,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [status, setStatus] = useState<AuthStatus>('idle');
     const navigate = useNavigate();
 
-
-
-    const login = useCallback(async (credentials: LoginUser) => {
-        try {
-            await axios.get("sanctum/csrf-cookie");
-            const res = await axios.post("login", credentials);
-            setUser(res.data.user);
-            setStatus("authenticated");
-            navigate("/");
-        } catch (e) {
-            console.log(e);
-            throw e;
-        }
-    }, [navigate]);
-
-    const logout = useCallback(async () => {
-        try {
-            await axios.post("logout");
-        } catch (e) {
-            console.log(e);
-
-        } finally {
-            setStatus("loggedout");
-            setUser(null);
-            navigate("/login", { replace: true });
-          //  navigate(0) //refresh page extra layer proection
-        }
-    }, [navigate]);
-
     const getUser = useCallback(async () => {
         try {
             const res = await axios.get("api/user");
@@ -62,6 +33,36 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         }
     }, []);
+
+
+    const login = useCallback(async (credentials: LoginUser) => {
+        try {
+            await axios.get("sanctum/csrf-cookie");
+            await axios.post("login", credentials);
+
+            return await getUser();
+
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
+    }, [getUser]);
+
+    const logout = useCallback(async () => {
+        try {
+            await axios.post("logout");
+        } catch (e) {
+            console.log(e);
+
+        } finally {
+            setStatus("loggedout");
+            setUser(null);
+            navigate("/login", { replace: true });
+            //  navigate(0) //refresh page extra layer proection
+        }
+    }, [navigate]);
+
+
 
     useEffect(() => {
         getUser();

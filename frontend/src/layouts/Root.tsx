@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
-import { FiHome, FiUsers, FiMenu, FiLogOut } from "react-icons/fi";
+import { FiHome, FiUsers, FiMenu, FiLogOut, FiX } from "react-icons/fi";
 import { FaRegBuilding } from "react-icons/fa";
 
 import { Navigate, NavLink, Outlet, useLocation } from "react-router";
@@ -93,6 +93,8 @@ const Root = () => {
         </button>
 
 
+
+
         <div className="px-4  md:pl-[350px] max-w-[1600px]">
           <Outlet />
           <Footer />
@@ -123,7 +125,7 @@ const Root = () => {
 
                 <SidebarItems>
                   <SidebarItemGroup className="px-5">
-                    <SidebarItem  as="p" className="py-3 px-4" icon={FiHome} active={location.pathname === '/'}>
+                    <SidebarItem as="p" className="py-3 px-4" icon={FiHome} active={location.pathname === '/'}>
                       <NavLink onClick={handleLinkClick} className="block w-full no-underline" to="/">
                         Dashboard
                       </NavLink>
@@ -147,12 +149,16 @@ const Root = () => {
               </div>
 
 
-              <div  className="">
+              <div className="">
                 <Button className="cursor-pointer" color={'red'} title="Click" onClick={handleLogout} >
                   <FiLogOut /> Logout
                 </Button>
 
               </div>
+
+              <button onClick={() => setIsOpen(false)} className="md:hidden absolute left-3 top-5 flex items-center justify-center cursor-pointer z-5">
+                <FiX color="black " size={20} />
+              </button>
 
 
 

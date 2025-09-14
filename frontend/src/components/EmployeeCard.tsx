@@ -79,10 +79,10 @@ export default function EmployeeCard({ id }: { readonly id: string }) {
           </div>
           <div>
             <h2 className="text-2xl font-bold">
-              {employee.first_name} {employee.last_name}
+              Fullname : {employee.first_name} {employee.last_name}
             </h2>
-            <p className="text-gray-600">{employee.email}</p>
-            <p className="text-gray-600">{employee.phone}</p>
+            <p className="text-gray-600">Email: {employee.email ?? 'NA'}</p>
+            <p className="text-gray-600">Phone: {employee.phone ?? 'NA'}</p>
             <p className="text-blue-500 font-semibold hover:text-black-700  mt-1">
               <Link to={`/companies/${employee.company?.id}/details`} title="Click to visit company">Company: {employee.company?.name}</Link>
             </p>

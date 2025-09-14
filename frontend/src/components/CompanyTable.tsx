@@ -105,6 +105,7 @@ export default function CompanyTable() {
         } catch (error) {
 
             if (error instanceof AxiosError) {
+                setLoading(false);
 
                 setError(error.response?.data.message)
 
@@ -192,7 +193,7 @@ export default function CompanyTable() {
             {/* Table */}
             {status === "success" && (
                 <div className="overflow-x-auto    rounded-md flex  pb-2 ">
-                    <Table className="w-full" striped>
+                    <Table className="" striped>
                         <TableHead >
                             <TableRow >
                                 {rows.map((row) => (
@@ -215,15 +216,19 @@ export default function CompanyTable() {
                                             {company.id}
                                         </TableCell>
                                         <TableCell>{company.name}</TableCell>
-                                        <TableCell>{company.email}</TableCell>
+                                        <TableCell>{company.email ?? 'NA'}</TableCell>
                                         <TableCell>
-                                            <a title={company.website} href={company.website} className="text-xs text-blue-500 underline hover:opacity-70" target="_blank">
+                                            {company.website ? <a title={company.website} href={company.website} className="text-xs text-blue-500 underline hover:opacity-70" target="_blank">
                                                 {company.website}
-                                            </a>
+                                            </a> : 'NA'}
                                         </TableCell>
 
                                         <TableCell>
-                                            <img src={company.logo as string} alt={company.name} className="h-10 w-10 object-cover rounded" />
+                                            {
+                                                
+                                                <img src={company.logo as string ?? 'https://d2jhcfgvzjqsa8.cloudfront.net/storage/2022/04/download.png'} alt={company.name} className="h-10 w-10 object-cover rounded" />
+                                            }
+
                                         </TableCell>
                                         <TableCell>{company.employees_count}</TableCell>
                                         <TableCell className="flex gap-2 items-center">

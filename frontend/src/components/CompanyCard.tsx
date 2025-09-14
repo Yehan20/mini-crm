@@ -64,20 +64,25 @@ export default function CompanyCard({ id }: { readonly id: string }) {
             {/* Company Info */}
             <Card>
                 <div className="md:flex items-center space-x-4">
-                    {typeof company.logo === "string" && (
+                    {
+                 
                         <img
-                            src={company.logo}
+                            src={company.logo as string  ?? 'https://d2jhcfgvzjqsa8.cloudfront.net/storage/2022/04/download.png'}
                             alt={company.name}
                             className="h-20 w-20 object-cover rounded-full"
                         />
-                    )}
+                    }
+
+
                     <div>
-                        <h2 className="text-2xl font-bold">{company.name}</h2>
-                        <p className="text-gray-600">{company.email}</p>
-                        <p className="text-blue-600">
-                            <a href={`${company.website}`} target="_blank">
-                                {company.website}
+                        <h2 className="text-2xl font-bold">Name : {company.name}</h2>
+                        <p className="text-gray-600 mb-1">Email : {company.email ?? 'NA'}</p>
+                        <p className="text-blue-600 mb-1">
+                            Website :
+                             { company.website ? <a className="hover:opacity-60" href={`${company.website}`} target="_blank">
+                                 {company.website}
                             </a>
+                             : ' NA'}
                         </p>
                     </div>
                 </div>

@@ -197,8 +197,8 @@ export default function EmployeeTable() {
                                     </TableCell>
                                     <TableCell>{employee.first_name}</TableCell>
                                     <TableCell>{employee.last_name}</TableCell>
-                                    <TableCell>{employee.email}</TableCell>
-                                    <TableCell>{employee.phone}</TableCell>
+                                    <TableCell>{employee.email ?? 'NA'}</TableCell>
+                                    <TableCell>{employee.phone ?? 'NA'}</TableCell>
 
                                     <TableCell><Link className="text-blue-700 font-semibold hover:text-gray-700" title="Visit company" to={`/companies/${employee.company_id}/details`}>{employee.company?.name}</Link></TableCell>
                                     <TableCell className="flex items-center gap-2">

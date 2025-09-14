@@ -27,11 +27,11 @@ form {
      margin-top: 20px;
 }
 .paginator  {
-   @apply scale-[0.8] md:scale-[1]
+   @apply scale-[0.7] md:scale-[1] -translate-y-[10px] md:translate-y-0
 }
 
 table {
-  @apply table-auto  w-full  md:max-w-[1500px]
+  @apply table-auto  w-full md:w-[1100px] md:max-w-[1500px]
   
   
 }

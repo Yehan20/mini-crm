@@ -59,7 +59,10 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
         const { errorBag, errorBagFilled } = validate(newCompany, {
             emailFormat: true,
             emptyFeilds: true,
-        }, ['deleted_at'])
+        }, ['deleted_at','email','logo','website'
+
+
+        ])
 
 
         if (errorBagFilled) {
@@ -72,10 +75,11 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
 
         // Based on mode map the method and then redirect to companies
         try {
+            console.log('company',newCompany);
             const companyFormData = new FormData();
             companyFormData.append('name', newCompany.name);
-            companyFormData.append('email', newCompany.email);
-            companyFormData.append('website', newCompany.website);
+            companyFormData.append('email', newCompany.email??'');
+            companyFormData.append('website', newCompany.website??'');
 
             if (newCompany.logo instanceof File) companyFormData.append('logo', newCompany.logo);
 
@@ -241,13 +245,13 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                     {/* Email */}
                     <div>
                         <Label htmlFor="email" className="mb-2 block">
-                            Company email*
+                            Company email (optional)
                         </Label>
                         <TextInput
                             id="email"
-                            type="email"
+                            type="text"
                             name="email"
-                            value={newCompany.email}
+                            value={newCompany.email??''}
                             color={errors?.email?.length ? "failure" : "gray"}
                             placeholder="name@company.com"
                             onChange={handleInput}
@@ -264,13 +268,13 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                     {/* Website */}
                     <div>
                         <Label htmlFor="website" className="mb-2 block">
-                            Website*
+                            Website (optional)
                         </Label>
                         <TextInput
                             id="website"
                             type="text"
                             name="website"
-                            value={newCompany.website}
+                            value={newCompany.website??''}
                             color={errors?.website?.length ? "failure" : "gray"}
                             placeholder="https://www.company.com"
                             onChange={handleInput}
@@ -287,7 +291,7 @@ export default function CompanyForm({ mode }: { readonly mode: 'Create' | 'Updat
                     {/* Image */}
                     <div className="max-w-md">
                         <Label className="mb-2 block" htmlFor="logo">
-                            Upload logo (100x100)
+                            Logo (optional) (max 512 kb) (min : 100x100)
                         </Label>
                         <FileInput id="logo" onChange={handleFile} />
                         <div className="mt-2">

@@ -5,12 +5,14 @@ import { AxiosError } from "axios";
 import type { ErrorBag, LoginUser } from "../types/types";
 import { validate } from "../utils/helpers";
 import BaseAlert from "../components/ui/BaseAlert";
+import { useNavigate } from "react-router";
 
 
 const Login = () => {
 
 
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [loginInfo, setLoginInfo] = useState<LoginUser>({
     email: "",
@@ -57,6 +59,7 @@ const Login = () => {
 
     try {
       await login(loginInfo);
+      navigate('/');
     } catch (e) {
       setLoading(false);
       if (e instanceof AxiosError) {
