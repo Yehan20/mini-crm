@@ -111,11 +111,11 @@ export default function CompanyCard({ id }: { readonly id: string }) {
                                             className="text-blue-500 hover:text-gray-700">
                                             {emp.id}
                                         </Link></TableCell>
-                                    <TableCell>{emp.first_name}</TableCell>
+                                  
                                     <TableCell>{emp.first_name}</TableCell>
                                     <TableCell>{emp.last_name}</TableCell>
-                                    <TableCell>{emp.email}</TableCell>
-                                    <TableCell>{emp.phone}</TableCell>
+                                    <TableCell>{emp.email?? 'NA'}</TableCell>
+                                    <TableCell>{emp.phone?? 'NA'}</TableCell>
                                 </TableRow>
                             ))
                         ) : (
