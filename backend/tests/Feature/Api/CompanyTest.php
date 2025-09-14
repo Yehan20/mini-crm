@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\Jobs\ProcessCompany;
+use App\Jobs\SendCompanyCreatedMail;
 use App\Mail\CompanyCreatedMail;
 use App\Models\Company;
 use App\Models\User;
@@ -70,7 +70,7 @@ class CompanyTest extends TestCase
         Mail::fake();
 
         // Dispatch job immediatly
-        ProcessCompany::dispatchSync($company, $this->user);
+        SendCompanyCreatedMail::dispatchSync($company, $this->user);
 
         // Check mail sent
         Mail::assertSent(CompanyCreatedMail::class);
