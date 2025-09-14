@@ -29,6 +29,7 @@ You can use the following test user to log in:
 - All employees in company deleted when company is deleted
 - Used Soft deletes there for does not delete company thumbnail when company deleted.
 - Employee Must have an company no employee cannot be made without a company 
+- As per requirment email feild is not required. email is sent only to admin user
 
 ## Testing
 - PHP Unit Tests (Feature tests)

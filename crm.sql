@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2025 at 01:15 PM
+-- Generation Time: Sep 14, 2025 at 02:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,16 +33,6 @@ CREATE TABLE `cache` (
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('crm-backend-cache-d189a3df25facd3522214377f5876bcb', 'i:1;', 1757613093),
-('crm-backend-cache-d189a3df25facd3522214377f5876bcb:timer', 'i:1757613093;', 1757613093),
-('crm-backend-cache-f1f70ec40aaa556905d4a030501c0ba4', 'i:10;', 1757675379),
-('crm-backend-cache-f1f70ec40aaa556905d4a030501c0ba4:timer', 'i:1757675379;', 1757675379);
-
 -- --------------------------------------------------------
 
 --
@@ -64,9 +54,9 @@ CREATE TABLE `cache_locks` (
 CREATE TABLE `companies` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `website` varchar(255) NOT NULL,
-  `logo` varchar(255) NOT NULL COMMENT 'file path to logo',
+  `email` varchar(255) DEFAULT NULL,
+  `website` varchar(255) DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL COMMENT 'file path to logo',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -77,38 +67,26 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `email`, `website`, `logo`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Cruickshank-Barrows', 'cale.okeefe@marvin.com', 'https://www.sanford.com', 'https://placehold.co/100', '2025-09-11 14:49:47', '2025-09-11 04:48:26', '2025-09-11 14:49:47'),
-(2, 'Miller-Daugherty', 'dwisoky@pacocha.com', 'https://www.abshire.biz', 'https://placehold.co/100', '2025-09-11 14:50:44', '2025-09-11 04:48:26', '2025-09-11 14:50:44'),
-(3, 'Kassulke-Koelpin', 'aida.nicolas@bogan.org', 'https://www.langosh.net', 'https://placehold.co/100', '2025-09-11 14:50:49', '2025-09-11 04:48:26', '2025-09-11 14:50:49'),
-(4, 'Braun, Streich and Oberbrunner', 'orodriguez@christiansen.com', 'https://www.simonis.net', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(5, 'Abshire-Sauer', 'grady.damon@bauch.com', 'https://www.bins.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(6, 'Cummings Group', 'cormier.jillian@adams.com', 'https://www.adams.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(7, 'Schaefer-Hane', 'ihyatt@abbott.com', 'https://www.keebler.biz', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(8, 'Will-DuBuque', 'lucy.williamson@luettgen.biz', 'https://www.king.net', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(9, 'Kerluke Inc', 'nrolfson@keebler.com', 'https://www.ankunding.biz', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(10, 'Effertz, Terry and Larkin', 'lucile.jacobson@bartoletti.com', 'https://www.hessel.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(11, 'O\'Conner-Boyle', 'huel.deondre@lockman.com', 'https://www.ortiz.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(12, 'Towne LLC', 'tweissnat@hauck.com', 'https://www.spencer.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(13, 'Huel, Kuphal and Dickens', 'soledad47@robel.com', 'https://www.hartmann.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(14, 'McLaughlin-Kuvalis', 'kiehn.vergie@quitzon.com', 'https://www.bradtke.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(15, 'Kulas Ltd', 'carmelo.feil@nicolas.com', 'https://www.miller.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(16, 'Daugherty Inc', 'emcclure@nikolaus.com', 'https://www.yost.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(17, 'Klocko, Sporer and Weissnat', 'aditya.lesch@hodkiewicz.com', 'https://www.mayert.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(18, 'Keeling LLC', 'emilie.boyle@harber.com', 'https://www.orn.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(19, 'Hermann Group', 'norberto34@runte.net', 'https://www.dach.net', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(20, 'Erdman, Erdman and Zieme', 'kacie73@haley.com', 'https://www.larkin.com', 'https://placehold.co/100', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(21, 'aslan', 'koshila@test.com', 'aaaaaa', 'logos/4vH85BLaXcVnr61Y3xQAvA20yyDhtsSe0TR0jL6q.jpg', '2025-09-11 23:20:18', '2025-09-11 13:23:58', '2025-09-11 23:20:18'),
-(22, 'abc', 'gawokak@mailinator.com', 'https://www.kugiworizud.ws', 'logos/h51hQAxQJ1hvQjW7ZSBnWIVKfCtOqm3iDw7VmvF6.jpg', '2025-09-11 15:37:47', '2025-09-11 13:25:01', '2025-09-11 15:37:47'),
-(23, 'abc1', 'gawokak1@mailinator.com', 'https://www.kugiworizud.ws', 'logos/ZsqkUcXPyEvDW8tqnMNdwrANDIYO5nmsm3l8F1C7.jpg', '2025-09-11 14:44:57', '2025-09-11 13:25:47', '2025-09-11 14:44:57'),
-(24, 'Holcomb', 'pypemos@mailinator.com', 'https://www.nozom.biz', 'logos/hAg2OknR7DxReyhgQTCidV92DiKQFeDCDFwJlMEU.jpg', '2025-09-11 14:44:52', '2025-09-11 13:27:19', '2025-09-11 14:44:52'),
-(25, 'My Company', 'paolo11.kuphal3@example.org', 'https://www.baumbach', 'logos/4yHLDuJjoAgprhuSpwcEGxsN1aNpTCOjbKB3uomt.jpg', '2025-09-11 22:52:39', '2025-09-11 18:48:14', '2025-09-11 22:52:39'),
-(26, 'Miranda Griffin Co', 'jojuwita@mailinator.com', 'https://www.syhujiq.ws', 'logos/GSISgXKn4YsFpnfy315JZLs8xVbSvlIQHwfbhDmz.jpg', NULL, '2025-09-12 01:39:10', '2025-09-12 01:39:10'),
-(27, 'Pittman Luna Trading', 'dudino@mailinator.com', 'https://www.hytihytiteg.net', 'logos/OoR1LgQzzcxOBtDoRVtQPi0b5YFjlNvdTvlVHrtL.jpg', '2025-09-12 04:11:01', '2025-09-12 01:39:42', '2025-09-12 04:11:01'),
-(28, 'Perry Hooper 1rading', 'cotow@mailinator.com', 'https://www.wuvodav.ws', 'logos/jD4GwsNXr3rEy9RDxPSulKQQ5qX0fe9oGhiNq2EE.jpg', NULL, '2025-09-12 02:58:39', '2025-09-12 03:13:30'),
-(29, 'Rasmussen and Whitehead Co', 'wyfujujab@mailinator.com', 'https://www.reda.ws', 'logos/nIoXmGfFMpIIOPDOwBpqxTyEXpJDTIRXHnqo38S8.jpg', NULL, '2025-09-12 04:32:53', '2025-09-12 04:32:53'),
-(30, 'Dennis Dorsey Plc', 'qyfagep@mailinator.com', 'https://www.jaj.ca', 'logos/2dL2FG8LifuwjWfqs1NGwVRzOlGfsucX38FxGTOv.jpg', '2025-09-12 05:33:28', '2025-09-12 04:33:19', '2025-09-12 05:33:28'),
-(31, 'Harper and Horn Plc', 'wicexem@mailinator.com', 'https://www.rulocoraf.us', 'logos/HYQKH2yNZcf2oo1LgO9y91vpI99cxmiKt7VhcdNe.jpg', '2025-09-12 05:24:49', '2025-09-12 05:24:41', '2025-09-12 05:24:49'),
-(32, 'sassss', 'qyfage1p@mailinator.com', '1111', 'logos/Po1oNk2tg45Hg7bHvTQ7z5bmvGtEECggGl4nly9z.jpg', '2025-09-12 05:33:23', '2025-09-12 05:33:04', '2025-09-12 05:33:23');
+(1, 'Roob, Schaefer and Dicki', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(2, 'Bogisich, Lubowitz and Stanton', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(3, 'Prohaska, Schmidt and Raynor', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(4, 'Larkin, Powlowski and Abshire', 'miller.pete@bashirian.com', 'https://www.gutkowski.com', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(5, 'Murray LLC', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(6, 'Morar, Effertz and Kertzmann', 'umante@pouros.com', 'https://www.auer.com', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(7, 'Oberbrunner-Hand', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(8, 'Leffler, Schuppe and Parisian', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(9, 'Dickens, Schuster and Larkin', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(10, 'Koelpin Inc', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(11, 'Jast, Beier and Douglas', 'weissnat.twila@collins.com', 'https://www.kling.net', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(12, 'Hyatt, Reinger and Hickle', 'uleuschke@buckridge.com', 'https://www.denesik.org', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(13, 'Ferry-Conroy', 'mia69@altenwerth.biz', 'https://www.gerlach.com', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(14, 'Russel, Dach and Rohan', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(15, 'Douglas, Welch and Will', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(16, 'Cartwright, West and Jones', 'hermiston.mackenzie@goyette.com', 'https://www.boyle.com', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(17, 'Mohr-Leffler', NULL, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(18, 'Nolan Inc', 'nico07@stokes.info', 'https://www.stracke.info', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(19, 'Daugherty PLC', 'rondricka@reinger.com', 'https://www.roob.com', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(20, 'Ritchie PLC', 'award@howell.org', 'https://www.prohaska.org', 'https://placehold.co/100', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43');
 
 -- --------------------------------------------------------
 
@@ -121,8 +99,8 @@ CREATE TABLE `employees` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `company_id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -133,57 +111,56 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`id`, `first_name`, `last_name`, `company_id`, `email`, `phone`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Hyman', 'Casper', 11, 'krohan@example.com', '1-877-512-3820', '2025-09-11 23:43:01', '2025-09-11 04:48:26', '2025-09-11 23:43:01'),
-(2, 'Weston', 'Hyatt', 11, 'hane.carey@example.com', '(844) 750-9331', '2025-09-11 23:45:12', '2025-09-11 04:48:26', '2025-09-11 23:45:12'),
-(3, 'Brennon11111', 'Durgan11', 10, 'hailey09@example.com', '0712358379', NULL, '2025-09-11 04:48:26', '2025-09-11 23:48:26'),
-(4, 'Chloe', 'Reinger', 10, 'ara.casper@example.net', '1-877-387-7894', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(5, 'Lenna', 'Mills', 17, 'jharvey@example.org', '877-318-2313', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(6, 'Kenyatta', 'Wiza', 8, 'treutel.mortimer@example.com', '800-980-0720', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(7, 'Terrill', 'Graham', 14, 'schimmel.micah@example.org', '800-802-3190', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(8, 'Maryam', 'Effertz', 7, 'pietro.roob@example.net', '844.302.9380', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(9, 'Braulio', 'Haag', 20, 'madie.gibson@example.com', '1-800-400-0044', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(10, 'Rosalyn', 'Hackett', 7, 'danyka.gerlach@example.net', '(866) 332-3828', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(11, 'Sadye', 'Kulas', 14, 'ulices58@example.net', '(800) 557-7191', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(12, 'Matilde', 'Rosenbaum', 15, 'angelica.adams@example.net', '(866) 265-5366', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(13, 'Trever', 'Douglas', 8, 'qschowalter@example.net', '1-877-817-0572', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(14, 'Loraine', 'Metz', 5, 'mills.haley@example.org', '(877) 544-6717', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(15, 'Laurel', 'Bayer', 16, 'raquel50@example.com', '877.462.6388', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(16, 'Glennie', 'O\'Conner', 11, 'qharris@example.com', '(800) 313-4280', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(17, 'Jerrold', 'Brekke', 20, 'mziemann@example.com', '844.442.9328', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(18, 'Sterling', 'Fahey', 17, 'tom93@example.org', '866-632-4897', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(19, 'Isom', 'Cassin', 5, 'areichel@example.net', '800.345.2043', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(21, 'Nathen', 'Hermiston', 6, 'kirlin.sophie@example.com', '1-844-741-0952', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(22, 'Edwina', 'Hills', 13, 'marks.jacey@example.net', '888-836-2444', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(23, 'Berneice', 'Osinski', 6, 'ismith@example.net', '1-844-417-7548', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(24, 'Modesta', 'Kohler', 18, 'mboehm@example.org', '1-844-477-0007', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(26, 'Sherman', 'Daugherty', 11, 'sgorczany@example.com', '1-800-220-0870', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(27, 'Gina', 'Mante', 9, 'kerluke.arden@example.net', '844-817-1354', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(28, 'Kirsten', 'Cummerata', 5, 'omckenzie@example.net', '844-904-2862', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(29, 'Jamir', 'Zboncak', 6, 'cade.kiehn@example.net', '888-618-3921', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(31, 'Lavinia', 'Walter', 16, 'schaefer.carol@example.net', '888.840.6879', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(33, 'Timmy', 'Parker', 15, 'mwill@example.com', '1-844-595-4633', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(34, 'Krystel', 'Thompson', 8, 'ila.herzog@example.net', '1-800-916-2076', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(35, 'Aleen', 'Hand', 16, 'lavada.cartwright@example.org', '800.700.0662', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(36, 'Anjali', 'Schulist', 18, 'ihuels@example.org', '844-979-1180', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(38, 'Rebeca', 'Hahn', 19, 'morissette.jace@example.org', '1-800-452-6757', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(39, 'Terence', 'Bins', 20, 'ehagenes@example.net', '844.328.1097', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(42, 'Luna', 'Miller', 9, 'morissette.myrtle@example.com', '(800) 970-6108', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(43, 'Conner', 'Muller', 12, 'martin.kling@example.com', '(866) 397-7757', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(44, 'Alan', 'Jones', 9, 'swyman@example.net', '888-376-2650', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(45, 'Ulices', 'Schimmel', 5, 'anthony.kohler@example.com', '1-855-947-8655', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(47, 'Carley', 'Hoeger', 6, 'jayson.osinski@example.net', '(855) 289-2819', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(48, 'Hortense', 'Ruecker', 20, 'carmen.wintheiser@example.net', '844.272.0131', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(50, 'Brandon', 'Schroeder', 19, 'brandon25@example.com', '855.466.1179', NULL, '2025-09-11 04:48:26', '2025-09-11 04:48:26'),
-(51, 'aaa', 'aaa', 8, 'jylahulul@mailinator.com', '0712358379', '2025-09-11 23:42:54', '2025-09-11 21:05:49', '2025-09-11 23:42:54'),
-(52, 'Hayes', 'Cook', 6, 'luqugaz@mailinator.com', '0712358379', NULL, '2025-09-12 00:17:03', '2025-09-12 00:17:03'),
-(53, 'Alexandra', 'Carey', 16, 'lusinofux@mailinator.com', '0712358379', NULL, '2025-09-12 01:17:12', '2025-09-12 01:17:12'),
-(54, 'Maia', 'Williamson', 20, 'hohabecib@mailinator.com', '0712358379', '2025-09-12 04:10:33', '2025-09-12 01:18:29', '2025-09-12 04:10:33'),
-(55, 'Solomon', 'William', 7, 'pazozo@mailinator.com', '+1 (874) 399-3', NULL, '2025-09-12 05:16:09', '2025-09-12 05:16:09'),
-(56, 'Doris111111111', 'Byers', 28, 'qage@mailinator.com', '+1 (165) 802-', '2025-09-12 05:18:51', '2025-09-12 05:18:27', '2025-09-12 05:18:51'),
-(57, 'Rose', 'Hicks', 18, 'qeqyfulyj@mailinator.com', '+1 (554) 936-5', NULL, '2025-09-12 05:23:44', '2025-09-12 05:23:44'),
-(58, 'Austin', 'Rodgers', 15, 'sife@mailinator.com', '+1 (234) 704-8131', NULL, '2025-09-12 05:25:38', '2025-09-12 05:25:38'),
-(59, 'Karina', 'Graham', 15, 'jyjelycuw@mailinator.com', '+1 (701) 149-3928', NULL, '2025-09-12 05:33:43', '2025-09-12 05:33:43'),
-(60, 'Gage111', 'Petty', 20, 'jyjelycuw@mailinator1.com', '+1 (732) 977-5728', '2025-09-12 05:34:24', '2025-09-12 05:33:58', '2025-09-12 05:34:24');
+(1, 'Perry', 'Reinger', 7, 'abner.romaguera@example.org', '1-888-482-7979', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(2, 'Rollin', 'Eichmann', 9, 'germaine.kihn@example.com', '1-800-599-7104', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(3, 'Ena', 'McLaughlin', 6, 'madonna.farrell@example.net', '(888) 936-6619', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(4, 'Maegan', 'Kautzer', 2, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(5, 'Joan', 'Lebsack', 3, 'jared41@example.com', '1-844-417-1143', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(6, 'Hilario', 'Haley', 10, 'finn.raynor@example.net', '1-888-864-5354', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(7, 'Kailey', 'Lemke', 1, 'carolyne.wilkinson@example.com', '866.719.7420', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(8, 'Beaulah', 'Jast', 2, 'noconner@example.org', '(844) 208-6486', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(9, 'Reece', 'Wuckert', 4, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(10, 'Cielo', 'Larkin', 8, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(11, 'Coralie', 'Nienow', 5, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(12, 'Lessie', 'Beier', 10, 'beier.joan@example.net', '877.644.1868', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(13, 'Adrian', 'Effertz', 9, 'polly.howell@example.com', '855.946.2336', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(14, 'Marco', 'Kozey', 3, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(15, 'Burley', 'Parker', 4, 'oberbrunner.glenda@example.net', '800.939.5390', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(16, 'Tiara', 'Boyle', 7, 'michel50@example.net', '1-855-523-8802', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(17, 'Tierra', 'Luettgen', 8, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(18, 'Kristy', 'Roob', 3, 'skylar.quigley@example.com', '1-844-389-7411', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(19, 'Okey', 'Oberbrunner', 7, 'leuschke.sage@example.net', '1-855-591-4882', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(20, 'Chelsie', 'Welch', 1, 'jaclyn.greenholt@example.org', '(888) 455-5470', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(21, 'Earline', 'Okuneva', 7, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(22, 'Merle', 'Barton', 3, 'leora.senger@example.net', '844-682-5445', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(23, 'Timmy', 'Cormier', 5, 'cleve27@example.net', '866-764-7941', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(24, 'Sydnee', 'Pagac', 6, 'mboyer@example.org', '(888) 345-0777', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(25, 'Zena', 'Smitham', 5, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(26, 'Vergie', 'Quitzon', 4, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(27, 'Finn', 'Hamill', 6, 'drew.durgan@example.org', '1-800-443-5067', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(28, 'Elvie', 'Barrows', 7, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(29, 'Madelynn', 'Toy', 1, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(30, 'Kattie', 'Wintheiser', 8, 'mattie44@example.com', '(866) 469-8677', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(31, 'Lorine', 'Kirlin', 4, 'jast.mckenna@example.net', '(844) 715-6184', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(32, 'Antoinette', 'Moen', 1, 'shanahan.arno@example.net', '1-888-301-0055', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(33, 'Fletcher', 'Bahringer', 3, 'lou.mueller@example.com', '1-866-851-3882', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(34, 'Vada', 'Goldner', 9, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(35, 'Margarete', 'O\'Hara', 6, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(36, 'Greyson', 'Volkman', 2, 'brakus.cleo@example.net', '1-877-760-3457', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(37, 'Bessie', 'Veum', 4, 'wilford19@example.org', '1-844-791-5945', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(38, 'Casandra', 'Ward', 1, 'cummerata.jean@example.com', '877-732-7166', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(39, 'Modesto', 'Hackett', 2, 'holly.wisoky@example.net', '800-571-6438', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(40, 'Barbara', 'Pouros', 5, 'zhill@example.net', '(866) 697-7854', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(41, 'Jaqueline', 'Russel', 4, 'buster.lebsack@example.com', '(800) 555-0851', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(42, 'Citlalli', 'Terry', 6, 'breitenberg.lora@example.net', '(866) 788-6140', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(43, 'Camryn', 'Bogan', 5, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(44, 'Brandon', 'Durgan', 6, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(45, 'Madeline', 'Jacobs', 7, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(46, 'Rosalinda', 'DuBuque', 7, 'schimmel.willard@example.com', '(855) 896-2986', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(47, 'Tomas', 'Mayert', 1, 'noelia91@example.com', '(888) 973-5395', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(48, 'Brook', 'Torphy', 9, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(49, 'Missouri', 'Murphy', 4, 'markus.bins@example.com', '800.886.6261', NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43'),
+(50, 'Albina', 'Schamberger', 10, NULL, NULL, NULL, '2025-09-14 07:06:43', '2025-09-14 07:06:43');
 
 -- --------------------------------------------------------
 
@@ -306,14 +283,6 @@ CREATE TABLE `sessions` (
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `sessions`
---
-
-INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('dGNrOj6zJNzsRtWe2z88aH6zTrLWohPSb0hdqeu7', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiZ2prRXZTTXIybmVwUTJYcEV6RFliWTN0cWd1cVBOUE9xSUJPb1lKcyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvdXNlciI7fX0=', 1757675432),
-('Swy1EcoNdqIubF9ETWqbKzx16X6NDOBdlwPsTLiy', NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiM2htNnJjaDRyb1NMcTBGREVZMjNqQXIxZHU3RWs2THYwVkRwVXlGQiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hcGkvdXNlciI7fX0=', 1757673050);
-
 -- --------------------------------------------------------
 
 --
@@ -337,7 +306,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `is_admin`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin Crm', 'admin@crm.com', '2025-09-11 04:48:25', 1, '$2y$12$B2hRAghECd6wSTIYP4zNfO1mal7mI9RZKigECGyUTFYDjei69hV6O', 'uw4t8X1jegB0OS0flIyfHVamjpJorIV8CpwNRWO4WUKL1CKhKoaCGptcSrkt', '2025-09-11 04:48:26', '2025-09-11 04:48:26');
+(1, 'Admin Crm', 'admin@crm.com', '2025-09-14 07:06:42', 1, '$2y$12$/yNGwi//zVl3IarynDTW1uMdsBSCV5zgdZOAhp1nl9lu5iSPA4qJW', 'Aols5aGQt7', '2025-09-14 07:06:43', '2025-09-14 07:06:43');
 
 --
 -- Indexes for dumped tables
@@ -432,13 +401,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -450,7 +419,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
