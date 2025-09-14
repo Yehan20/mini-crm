@@ -42,7 +42,7 @@ class CompanyRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'min:3', 'max:30', 'unique:companies,name'],
+            'name' => ['required', 'string', 'min:3', 'max:100', 'unique:companies,name'],
             'email' => ['nullable',  'email', 'unique:companies,email', 'unique:users,email', 'unique:employees,email'],
             'website' => ['nullable', 'url', 'unique:companies,website'],
             'logo' => ['nullable', 'file', 'mimes:jpg,webp,png,jpeg', 'max:512', Rule::dimensions()->minWidth(100)->minHeight(100)],
@@ -51,7 +51,7 @@ class CompanyRequest extends FormRequest
         if (in_array($this->method(), ['PATCH', 'PUT'])) {
 
             $company = $this->route('company');
-            $rules['name'] = ['required', 'string', 'min:3', 'max:30', Rule::unique('companies', 'name')->ignore($company->id)];
+            $rules['name'] = ['required', 'string', 'min:3', 'max:100', Rule::unique('companies', 'name')->ignore($company->id)];
             $rules['email'] = ['nullable', 'email', Rule::unique('companies', 'email')->ignore($company->id), 'unique:users,email', 'unique:employees,email'];
             $rules['website'] = ['nullable', 'url', Rule::unique('companies', 'website')->ignore($company->id)];
         }
