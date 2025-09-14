@@ -17,9 +17,10 @@ class CompanyRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        // take the website remove http if there and replace wiht https and trim if having a ending slash other validation will happen in validator
 
-        $url = $this->website;
+        // Trim the data to catch for spacing
+        $url = trim($this->website);
+        $email = trim($this->email);
 
         if (preg_match('/^http:\/\//i', $url)) {
             $url = preg_replace('/^http:\/\//i', 'https://', $url);
@@ -28,7 +29,8 @@ class CompanyRequest extends FormRequest
         $url = rtrim($url, '/');
 
         $this->merge([
-            'website' => $url,
+            'website' => $url ? $url : null,
+            'email' => $email ? $email : null,
         ]);
     }
 
@@ -41,18 +43,17 @@ class CompanyRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'min:3', 'max:30', 'unique:companies,name'],
-            'email' => ['required', 'string', 'email', 'unique:companies,email', 'unique:users,email', 'unique:employees,email'],
-            'website' => ['required', 'unique:companies,website', 'url'],
-            'logo' => ['required', 'file', 'mimes:jpg,webp,png,jpeg', Rule::dimensions()->width(100)->height(100)],
+            'email' => ['nullable',  'email', 'unique:companies,email', 'unique:users,email', 'unique:employees,email'],
+            'website' => ['nullable', 'url', 'unique:companies,website'],
+            'logo' => ['nullable', 'file', 'mimes:jpg,webp,png,jpeg', 'max:512', Rule::dimensions()->minWidth(100)->minHeight(100)],
         ];
 
         if (in_array($this->method(), ['PATCH', 'PUT'])) {
 
             $company = $this->route('company');
             $rules['name'] = ['required', 'string', 'min:3', 'max:30', Rule::unique('companies', 'name')->ignore($company->id)];
-            $rules['email'] = ['required', 'email', Rule::unique('companies', 'email')->ignore($company->id), 'unique:users,email', 'unique:employees,email'];
-            $rules['website'] = ['required', Rule::unique('companies', 'website')->ignore($company->id), 'url'];
-            $rules['logo'] = ['nullable', 'file', 'mimes:jpg,webp,png,jpeg', Rule::dimensions()->width(100)->height(100)];
+            $rules['email'] = ['nullable', 'email', Rule::unique('companies', 'email')->ignore($company->id), 'unique:users,email', 'unique:employees,email'];
+            $rules['website'] = ['nullable', 'url', Rule::unique('companies', 'website')->ignore($company->id)];
         }
 
         return $rules;
@@ -61,7 +62,8 @@ class CompanyRequest extends FormRequest
     public function messages()
     {
         return [
-            'logo.dimensions' => 'Logo should have width and height of 100px',
+            'logo.dimensions' => 'Logo should have min width and height of 100px',
+            'logo.max' => 'Logo  size must be less than  :max kb ',
         ];
     }
 }

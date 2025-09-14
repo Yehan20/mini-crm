@@ -105,7 +105,7 @@ class EmployeeTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        $response->assertInvalid(['first_name', 'last_name', 'company_id', 'email', 'phone']);
+        $response->assertInvalid(['first_name', 'last_name', 'company_id']);
     }
 
     public function test_update_employee_validation_error(): void
@@ -117,17 +117,17 @@ class EmployeeTest extends TestCase
 
         $response = $this->actingAs($this->user)->putJson('/api/employees/'.$employee->id, [
             'first_name' => '',
-            'last_name' => 'Updated',
+            'last_name' => '',
             'company_id' => $this->companyData->id,
-            'email' => '',
-            'phone' => '',
+            'email' => 'fakeemail@test.com',
+            'phone' => '0712222456',
         ]);
 
         $response->assertStatus(422);
-        $response->assertInvalid(['first_name', 'email', 'phone']);
+        $response->assertInvalid(['first_name', 'last_name']);
     }
 
-    public function test_store_employee_by_not_acting_as_user(): void
+    public function test_store_employee_cannot_be_performed_by_unauthenticated_user(): void
     {
         $response = $this->postJson('/api/employees', $this->employeeData);
 

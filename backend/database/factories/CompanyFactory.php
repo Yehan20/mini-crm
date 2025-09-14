@@ -16,12 +16,14 @@ class CompanyFactory extends Factory
      */
     public function definition(): array
     {
+        $randBool = fake()->boolean();
+
         return [
             //
             'name' => fake()->unique()->company(),
-            'email' => fake()->unique()->companyEmail(),
-            'website' => 'https://www.'.fake()->domainName(),
-            'logo' => 'https://placehold.co/100',
+            'email' => $randBool ? fake()->unique()->companyEmail() : null,
+            'website' => $randBool ? 'https://www.'.fake()->domainName() : null,
+            'logo' => $randBool ? 'https://placehold.co/100' : null,
         ];
     }
 }

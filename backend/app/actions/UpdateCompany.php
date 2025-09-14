@@ -22,8 +22,12 @@ class UpdateCompany
     {
 
         if ($file) {
-            // delete the existing file
-            Storage::disk('public')->delete($company->logo);
+
+            // delete the existing file if it exists previously
+            if ($company->logo) {
+                Storage::disk('public')->delete($company->logo);
+            }
+
             // store the new file
             $path = $file->store('logos', 'public');
             // add the path to the attributes array

@@ -6,6 +6,7 @@ namespace App\Actions;
 
 use App\Jobs\ProcessCompany;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 
 class CreateCompany
@@ -18,11 +19,14 @@ class CreateCompany
         //
     }
 
-    public function execute(array $attributes, UploadedFile $file): Company
+    public function execute(array $attributes, ?UploadedFile $file, User $user): Company
     {
 
         //
-        $path = $file->store('logos', 'public');
+        $path = null;
+        if ($file) {
+            $path = $file->store('logos', 'public');
+        }
 
         $company = Company::query()->create(
             array_merge($attributes, [
@@ -30,7 +34,7 @@ class CreateCompany
             ])
         );
 
-        ProcessCompany::dispatch($company)->afterCommit();
+        ProcessCompany::dispatch($company, $user);
 
         return $company;
     }

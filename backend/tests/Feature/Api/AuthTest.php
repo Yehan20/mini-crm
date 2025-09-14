@@ -20,7 +20,7 @@ class AuthTest extends TestCase
         $this->user = $this->createUser();
     }
 
-    public function test_users_can_login_and_validate_session_and_logout(): void
+    public function test_users_can_login_and_logout(): void
     {
 
         $csrf = $this->get('/sanctum/csrf-cookie');
@@ -35,12 +35,7 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertJson([
-            'user' => [
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-            ],
-        ]);
+        $response->assertJsonFragment(['message' => 'login success']);
 
         // Logout user
         auth()->logout();
@@ -49,7 +44,7 @@ class AuthTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_users_cannot_login_with_invalid_credintials(): void
+    public function test_users_cannot_login_with_invalid_credentials(): void
     {
 
         $csrf = $this->get('/sanctum/csrf-cookie');
@@ -64,7 +59,6 @@ class AuthTest extends TestCase
         $response->assertStatus(401);
 
         $response->assertJsonStructure([
-            'status',
             'message',
         ]);
     }

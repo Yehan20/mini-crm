@@ -1,35 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedUserController extends Controller
 {
-    //
-
-    public function store(LoginRequest $request)
+    // Login
+    public function store(LoginRequest $request): JsonResponse
     {
-        // dd("login");
 
-        $credintials = $request->validated();
+        $credentials = $request->validated();
 
-        if (Auth::attempt($credintials)) {
+        if (Auth::guard('web')->attempt($credentials)) {
 
             request()->session()->regenerate();
 
             return response()->json([
-                'user' => $request->user(),
+                'message' => 'login success',
             ]);
         }
 
         throw new AuthenticationException('Invalid user credentials');
     }
 
-    public function show(Request $request)
+    // Gets authenticated user
+    public function show(Request $request): JsonResponse
     {
 
         return response()->json([
@@ -37,7 +40,8 @@ class AuthenticatedUserController extends Controller
         ]);
     }
 
-    public function destroy(Request $request)
+    // Logouts the user
+    public function destroy(Request $request): Response
     {
 
         Auth::guard('web')->logout();

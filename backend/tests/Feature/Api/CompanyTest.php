@@ -41,7 +41,7 @@ class CompanyTest extends TestCase
             ->assertJsonCount(10, 'data');
     }
 
-    public function test_store_company(): void
+    public function test_store_company_successful(): void
     {
 
         // Act as user and run the route
@@ -60,7 +60,7 @@ class CompanyTest extends TestCase
             ]);
     }
 
-    public function test_store_company_and_notify(): void
+    public function test_store_company_and_notify_user(): void
     {
 
         // Create mock user
@@ -70,15 +70,15 @@ class CompanyTest extends TestCase
         Mail::fake();
 
         // Dispatch job immediatly
-        ProcessCompany::dispatchSync($company);
+        ProcessCompany::dispatchSync($company, $this->user);
 
         // Check mail sent
         Mail::assertSent(CompanyCreatedMail::class);
 
         // Check  "truth test".
-        Mail::assertSent(function (CompanyCreatedMail $mail) use ($company) {
+        Mail::assertSent(function (CompanyCreatedMail $mail) {
 
-            return $mail->company->email === $company->email;
+            return $mail->hasTo($this->user->email);
         });
     }
 
@@ -131,7 +131,7 @@ class CompanyTest extends TestCase
         ]);
 
         $response->assertStatus(422);
-        $response->assertInvalid(['email', 'name', 'logo']);
+        $response->assertInvalid(['name', 'website']);
     }
 
     public function test_update_company_validation_error(): void
@@ -139,17 +139,17 @@ class CompanyTest extends TestCase
         $company = Company::factory()->create();
 
         $response = $this->actingAs($this->user)->putJson('/api/companies/'.$company->id, [
-            'name' => 'test name',
+            'name' => '',
             'website' => 'https://test.com',
             'email' => '',
 
         ]);
 
         $response->assertStatus(422);
-        $response->assertInvalid(['email']);
+        $response->assertInvalid(['name']);
     }
 
-    public function test_store_company_by_not_acting_as_user(): void
+    public function test_store_company_cannot_be_performed_by_unauthenticated_user(): void
     {
 
         $response = $this->postJson('/api/companies', $this->companyData);
@@ -165,7 +165,9 @@ class CompanyTest extends TestCase
     private function createUser(): User
     {
 
-        return User::factory()->create();
+        return User::factory()->create([
+            'is_admin' => true,
+        ]);
     }
 
     private function createCompanyData(): array

@@ -18,14 +18,15 @@ class EmployeeFactory extends Factory
     public function definition(): array
     {
         $companyIds = Company::limit(10)->pluck('id')->toArray();
+        $randBool = fake()->boolean();
 
         return [
             //
             'first_name' => fake()->unique()->firstName(),
             'last_name' => fake()->unique()->lastName(),
             'company_id' => fake()->randomElement($companyIds),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->tollFreePhoneNumber(),
+            'email' => $randBool ? fake()->unique()->safeEmail() : null,
+            'phone' => $randBool ? fake()->tollFreePhoneNumber() : null,
 
         ];
     }
